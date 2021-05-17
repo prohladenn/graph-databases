@@ -1,2 +1,7 @@
+# IntelliJ IDEA
+/.idea
 # Project exclude paths
 /code-java/target/
+# In development
+/code-java
+/code-python3
