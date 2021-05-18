@@ -34,6 +34,8 @@ services:
     image: arangodb
     ports:
       - 8529:8529
+    environment:
+      ARANGO_NO_AUTH: 1
     deploy:
       resources:
         limits:
@@ -44,6 +46,9 @@ services:
     image: orientdb
     ports:
       - 2480:2480
+      - 2424:2424
+    environment:
+      ORIENTDB_ROOT_PASSWORD: 'password'
     deploy:
       resources:
         limits:
