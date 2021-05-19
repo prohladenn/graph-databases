@@ -59,10 +59,11 @@ public class JgraphtResearch {
 
     private static void findDijkstraShortestPathToFirst(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+        var to = graph.vertexSet().toArray(Integer[]::new)[0];
 
-        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to first vertex");
+        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to first vertex " + to);
         var global_start = System.nanoTime();
-        findDijkstraShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[0], vertexToTime);
+        findDijkstraShortestPathTo(graph, to, vertexToTime);
         var global_finish = System.nanoTime();
         System.out.println("Finish find shortest path (Dijkstra) for each " + source.getName() + " vertex to first vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
@@ -71,10 +72,11 @@ public class JgraphtResearch {
 
     private static void findDijkstraShortestPathToMiddle(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+        var to = graph.vertexSet().toArray(Integer[]::new)[source.getNodes() / 2];
 
-        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to middle vertex");
+        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to middle vertex " + to);
         var global_start = System.nanoTime();
-        findDijkstraShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() / 2], vertexToTime);
+        findDijkstraShortestPathTo(graph, to, vertexToTime);
         var global_finish = System.nanoTime();
         System.out.println("Finish find shortest path (Dijkstra) for each " + source.getName() + " vertex to middle vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
@@ -83,10 +85,11 @@ public class JgraphtResearch {
 
     private static void findDijkstraShortestPathToLast(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+        var to = graph.vertexSet().toArray(Integer[]::new)[source.getNodes() - 1];
 
-        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to last vertex");
+        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to last vertex " + to);
         var global_start = System.nanoTime();
-        findDijkstraShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() - 1], vertexToTime);
+        findDijkstraShortestPathTo(graph, to, vertexToTime);
         var global_finish = System.nanoTime();
         System.out.println("Finish find shortest path (Dijkstra) for each " + source.getName() + " vertex to last vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
@@ -103,10 +106,11 @@ public class JgraphtResearch {
 
     private static void findBellmanFordShortestPathToFirst(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+        var to = graph.vertexSet().toArray(Integer[]::new)[0];
 
-        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to first vertex");
+        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to first vertex " + to);
         var global_start = System.nanoTime();
-        findBellmanFordShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[0], vertexToTime);
+        findBellmanFordShortestPathTo(graph, to, vertexToTime);
         var global_finish = System.nanoTime();
         System.out.println("Finish find shortest path (BellmanFord) for each " + source.getName() + " vertex to first vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
@@ -115,10 +119,11 @@ public class JgraphtResearch {
 
     private static void findBellmanFordShortestPathToMiddle(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+        var to = graph.vertexSet().toArray(Integer[]::new)[source.getNodes() / 2];
 
-        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to middle vertex");
+        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to middle vertex " + to);
         var global_start = System.nanoTime();
-        findBellmanFordShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() / 2], vertexToTime);
+        findBellmanFordShortestPathTo(graph, to, vertexToTime);
         var global_finish = System.nanoTime();
         System.out.println("Finish find shortest path (BellmanFord) for each " + source.getName() + " vertex to middle vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
@@ -127,10 +132,11 @@ public class JgraphtResearch {
 
     private static void findBellmanFordShortestPathToLast(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+        var to = graph.vertexSet().toArray(Integer[]::new)[source.getNodes() - 1];
 
-        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to last vertex");
+        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to last vertex " + to);
         var global_start = System.nanoTime();
-        findBellmanFordShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() - 1], vertexToTime);
+        findBellmanFordShortestPathTo(graph, to, vertexToTime);
         var global_finish = System.nanoTime();
         System.out.println("Finish find shortest path (BellmanFord) for each " + source.getName() + " vertex to last vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 

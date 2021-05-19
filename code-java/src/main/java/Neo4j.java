@@ -10,8 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Neo4j implements AutoCloseable {
-    private static final String SELECT_ALL = "MATCH (n) RETURN n;";
-    private static final String DELETE_ALL = "MATCH (n) DETACH DELETE n;";
+    private static final String SELECT_ALL = "" +
+            "MATCH (n) " +
+            "RETURN n;";
+    private static final String DELETE_ALL = "" +
+            "MATCH (n) " +
+            "DETACH DELETE n;";
+    private static final String SHORTEST_PATH = "" +
+            "MATCH " +
+            "   (v1:NODE {id: %d} )," +
+            "   (v2:NODE {id: %d})," +
+            "   path = shortestPath((v1)-[:RELATED*]-(v2)) " +
+            "RETURN path";
 
     private final Driver driver;
 
@@ -77,16 +87,29 @@ public class Neo4j implements AutoCloseable {
         }
     }
 
+    public List<?> shortestPath(Integer v1, Integer v2) {
+        System.out.println("Operation 'shortestPath'");
+        try (Session session = driver.session()) {
+
+            var t = System.nanoTime();
+            var result = session.writeTransaction(tx -> tx.run(String.format(SHORTEST_PATH, v1, v2)).stream().collect(Collectors.toList()));
+            System.out.println("Shortest path length " + result.size() + " time " + (System.nanoTime() - t) / 1e9 + " sec \n");
+            return result;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         //Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
         Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
         //Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
 
         try (Neo4j neo4j = new Neo4j("bolt://localhost:7687", "neo4j", "QWErty123")) {
+            //neo4j.selectAll();
+            //neo4j.removeAll();
+            //neo4j.selectAll();
+            //neo4j.createGraph(graph);
             neo4j.selectAll();
-            neo4j.removeAll();
-            neo4j.selectAll();
-            neo4j.createGraph(graph);
+            neo4j.shortestPath(0, 100);
         }
     }
 }

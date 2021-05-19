@@ -1,329 +1,329 @@
 Start load COLLEGE graph
 Finish load COLLEGE graph
-Total time 0.469551631 sec
+Total time 0.380633186 sec
 Graph COLLEGE is correct
 
 Start find neighbors for each COLLEGE vertex (repeat 1000)
 Finish find neighbors for each COLLEGE vertex (repeat 1000)
-Total time 1.711166928 sec
+Total time 1.308773009 sec
 Most expensive (nano sec : vertex):
-32591091 : 3
-27838026 : 9
-18509015 : 1
-16146659 : 32
-13358962 : 555
-12003745 : 6
-11470787 : 62
-10795326 : 103
-10758966 : 42
-10516409 : 105
+24093380 : 1
+20643849 : 479
+20539320 : 3
+14103584 : 32
+14047329 : 9
+10451357 : 6
+10217170 : 42
+10124504 : 62
+9352735 : 41
+7926594 : 12
 
-Start find shortest path (Dijkstra) for each COLLEGE vertex to first vertex
+Start find shortest path (Dijkstra) for each COLLEGE vertex to first vertex 1
 Finish find shortest path (Dijkstra) for each COLLEGE vertex to first vertex
-Total time 1.289430712 sec
+Total time 1.297605054 sec
 Most expensive (nano sec : vertex):
-8102255 : 6
-6253618 : 1
-6109609 : 3
-5980330 : 774
-5747594 : 1598
-5071242 : 12
-3990729 : 41
-3945043 : 29
-3920496 : 50
-3609356 : 69
+7676172 : 3
+6876659 : 1
+6619188 : 779
+6342427 : 50
+6190798 : 56
+6049069 : 6
+5690154 : 1606
+5514541 : 66
+5272864 : 69
+5235044 : 41
 
-Start find shortest path (BellmanFord) for each COLLEGE vertex to first vertex
+Start find shortest path (BellmanFord) for each COLLEGE vertex to first vertex 1
 Finish find shortest path (BellmanFord) for each COLLEGE vertex to first vertex
-Total time 2.787940958 sec
+Total time 2.569504264 sec
 Most expensive (nano sec : vertex):
-12830045 : 1
-9395575 : 3
-8290443 : 219
-8197923 : 6
-7731521 : 606
-6413988 : 79
-6138243 : 83
-5696183 : 78
-5591393 : 91
-5590329 : 76
+14073128 : 1
+9948034 : 3
+7498895 : 295
+7327052 : 6
+7217658 : 728
+7033114 : 1271
+6546267 : 67
+6133032 : 823
+5568470 : 282
+5412940 : 62
 
-Start find shortest path (Dijkstra) for each COLLEGE vertex to middle vertex
+Start find shortest path (Dijkstra) for each COLLEGE vertex to middle vertex 950
 Finish find shortest path (Dijkstra) for each COLLEGE vertex to middle vertex
-Total time 0.925036508 sec
+Total time 0.965592287 sec
 Most expensive (nano sec : vertex):
-7285217 : 751
-2987035 : 1637
-2407186 : 1304
-2371210 : 408
-2262563 : 1306
-2261219 : 836
-2240071 : 1642
-2184210 : 1198
-2178655 : 1214
-2145239 : 1189
+6739552 : 1002
+3101309 : 1801
+2453749 : 1172
+2404539 : 1802
+2290839 : 751
+2263617 : 1443
+2192534 : 1526
+2177026 : 761
+2139859 : 765
+2112066 : 1568
 
-Start find shortest path (BellmanFord) for each COLLEGE vertex to middle vertex
+Start find shortest path (BellmanFord) for each COLLEGE vertex to middle vertex 950
 Finish find shortest path (BellmanFord) for each COLLEGE vertex to middle vertex
-Total time 2.341610944 sec
+Total time 2.35805444 sec
 Most expensive (nano sec : vertex):
-4743504 : 35
-4265434 : 1138
-3872033 : 977
-3601568 : 583
-3415996 : 1014
-3372131 : 1025
-3303885 : 968
-3298393 : 1410
-3298278 : 751
-3290572 : 940
+6945579 : 164
+5150933 : 1264
+4250275 : 319
+3915541 : 1320
+3831213 : 309
+3664323 : 190
+3632575 : 318
+3472322 : 1267
+3429309 : 1461
+3297208 : 310
 
-Start find shortest path (Dijkstra) for each COLLEGE vertex to last vertex
+Start find shortest path (Dijkstra) for each COLLEGE vertex to last vertex 1899
 Finish find shortest path (Dijkstra) for each COLLEGE vertex to last vertex
-Total time 1.913642387 sec
+Total time 2.096341413 sec
 Most expensive (nano sec : vertex):
-3399512 : 1551
-3091801 : 221
-2904137 : 1419
-2881226 : 1417
-2877258 : 1416
-2867108 : 1203
-2848457 : 545
-2707806 : 1289
-2606392 : 257
-2550021 : 454
+3772567 : 1407
+3588717 : 1721
+3429189 : 177
+3326483 : 1107
+3295691 : 1408
+3195380 : 782
+3183568 : 186
+3144645 : 1
+3121707 : 1406
+3047078 : 1454
 
-Start find shortest path (BellmanFord) for each COLLEGE vertex to last vertex
+Start find shortest path (BellmanFord) for each COLLEGE vertex to last vertex 1899
 Finish find shortest path (BellmanFord) for each COLLEGE vertex to last vertex
-Total time 2.235568317 sec
+Total time 2.404236225 sec
 Most expensive (nano sec : vertex):
-4226912 : 1009
-3469793 : 1771
-3211178 : 1305
-3159197 : 1772
-3154116 : 1815
-3141412 : 191
-3118174 : 1199
-3033379 : 1306
-3017728 : 474
-3009610 : 683
+3760245 : 1374
+3665531 : 1375
+3553217 : 432
+3290400 : 856
+3206934 : 1087
+3157849 : 323
+3055499 : 952
+3006794 : 823
+2997845 : 554
+2993321 : 272
 
 Start load GNUTELLA graph
 Finish load GNUTELLA graph
-Total time 0.06274758 sec
+Total time 0.054826997 sec
 Graph GNUTELLA is correct
 
 Start find neighbors for each GNUTELLA vertex (repeat 1000)
 Finish find neighbors for each GNUTELLA vertex (repeat 1000)
-Total time 2.770278732 sec
+Total time 2.205505009 sec
 Most expensive (nano sec : vertex):
-7732528 : 116
-7091627 : 2684
-7052138 : 6692
-6971463 : 1396
-6968627 : 8665
-6930002 : 7677
-6894298 : 5837
-6819302 : 291
-6629631 : 2935
-6601102 : 964
+7813479 : 814
+7576434 : 272
+7053113 : 5984
+7021277 : 354
+6938279 : 2754
+6865903 : 4910
+6683636 : 7878
+6681449 : 1511
+6591266 : 641
+6550951 : 2839
 
-Start find shortest path (Dijkstra) for each GNUTELLA vertex to first vertex
+Start find shortest path (Dijkstra) for each GNUTELLA vertex to first vertex 0
 Finish find shortest path (Dijkstra) for each GNUTELLA vertex to first vertex
-Total time 10.992835368 sec
+Total time 10.479996097 sec
 Most expensive (nano sec : vertex):
-13549380 : 623
-12829839 : 2455
-12733165 : 3699
-12501514 : 2527
-12436295 : 688
-12106864 : 2280
-10943733 : 5181
-10897744 : 2304
-10656513 : 2647
-10516703 : 2742
+14100221 : 4020
+13482617 : 2093
+12799928 : 10
+11824309 : 5610
+9559115 : 110
+9192627 : 5733
+8232587 : 3665
+8211511 : 1226
+8178952 : 2145
+8133049 : 1980
 
-Start find shortest path (BellmanFord) for each GNUTELLA vertex to first vertex
+Start find shortest path (BellmanFord) for each GNUTELLA vertex to first vertex 0
 Finish find shortest path (BellmanFord) for each GNUTELLA vertex to first vertex
-Total time 27.880097636 sec
+Total time 27.873617556 sec
 Most expensive (nano sec : vertex):
-54005208 : 3662
-37673111 : 5865
-26650751 : 2723
-23468860 : 5555
-20311307 : 2725
-20078930 : 5086
-19314697 : 4316
-18598640 : 7710
-16629766 : 2315
-16335642 : 2726
+46373428 : 7262
+29580155 : 6116
+27035215 : 6133
+18874713 : 6124
+18474435 : 6154
+14634194 : 6138
+14259752 : 6134
+13926694 : 6136
+13568942 : 6210
+13242121 : 6105
 
-Start find shortest path (Dijkstra) for each GNUTELLA vertex to middle vertex
+Start find shortest path (Dijkstra) for each GNUTELLA vertex to middle vertex 4870
 Finish find shortest path (Dijkstra) for each GNUTELLA vertex to middle vertex
-Total time 10.989697166 sec
+Total time 11.159843061 sec
 Most expensive (nano sec : vertex):
-8008026 : 4481
-7559874 : 4299
-7507097 : 7944
-7253632 : 4745
-7219709 : 799
-7115787 : 1385
-7082683 : 7083
-7081341 : 3259
-7034427 : 1382
-6937031 : 840
+10927703 : 5865
+8891467 : 107
+8716872 : 3451
+8562772 : 281
+8307170 : 108
+8099028 : 5299
+7890048 : 3620
+7873066 : 3822
+7864951 : 1627
+7747289 : 172
 
-Start find shortest path (BellmanFord) for each GNUTELLA vertex to middle vertex
+Start find shortest path (BellmanFord) for each GNUTELLA vertex to middle vertex 4870
 Finish find shortest path (BellmanFord) for each GNUTELLA vertex to middle vertex
-Total time 25.784654024 sec
+Total time 27.801608673 sec
 Most expensive (nano sec : vertex):
-26959682 : 2463
-16200368 : 2465
-15440586 : 7988
-14725875 : 5146
-13970950 : 5134
-13766536 : 2514
-13609628 : 5132
-12787967 : 4629
-12645834 : 5110
-11876453 : 3044
+10746690 : 1562
+10198643 : 2548
+10122338 : 4967
+10085171 : 3544
+9890660 : 3993
+9837877 : 8087
+9803938 : 4409
+9651550 : 7694
+9575454 : 7941
+9481852 : 7973
 
-Start find shortest path (Dijkstra) for each GNUTELLA vertex to last vertex
+Start find shortest path (Dijkstra) for each GNUTELLA vertex to last vertex 8845
 Finish find shortest path (Dijkstra) for each GNUTELLA vertex to last vertex
-Total time 20.781002255 sec
+Total time 21.8574296 sec
 Most expensive (nano sec : vertex):
-9844380 : 3618
-9731736 : 8596
-9664811 : 2108
-9556035 : 2998
-9539370 : 1459
-9377622 : 2100
-9246524 : 121
-9158804 : 2134
-9128683 : 6260
-9125564 : 4585
+67139572 : 2917
+20952465 : 5197
+17112004 : 7750
+16537083 : 5208
+16083105 : 7253
+14127063 : 5481
+13866039 : 5210
+13103691 : 7801
+12773609 : 5261
+12415512 : 5214
 
-Start find shortest path (BellmanFord) for each GNUTELLA vertex to last vertex
+Start find shortest path (BellmanFord) for each GNUTELLA vertex to last vertex 8845
 Finish find shortest path (BellmanFord) for each GNUTELLA vertex to last vertex
-Total time 25.788660378 sec
+Total time 27.798176116 sec
 Most expensive (nano sec : vertex):
-11042182 : 1658
-10557603 : 2603
-9981301 : 4427
-9951679 : 3422
-9626819 : 1061
-9478176 : 7341
-9452842 : 4228
-9304126 : 1212
-9206629 : 8612
-9082722 : 3045
+11791153 : 1321
+10814767 : 4394
+10076612 : 2319
+9876819 : 4648
+9804614 : 7326
+9744289 : 233
+9667927 : 6928
+9637362 : 1784
+9624240 : 7792
+9608468 : 5921
 
 Start load FACEBOOK graph
 Finish load FACEBOOK graph
-Total time 0.07486909 sec
+Total time 0.071380177 sec
 Graph FACEBOOK is correct
 
 Start find neighbors for each FACEBOOK vertex (repeat 1000)
 Finish find neighbors for each FACEBOOK vertex (repeat 1000)
-Total time 3.246488177 sec
+Total time 2.136420797 sec
 Most expensive (nano sec : vertex):
-24500304 : 107
-17718197 : 1684
-16914095 : 1912
-16238360 : 2030
-13991435 : 1238
-12704713 : 1669
-11950289 : 999
-11411127 : 1876
-11248524 : 1470
-11142673 : 542
+16576602 : 107
+13504057 : 1684
+13389955 : 376
+13218706 : 1912
+11858439 : 1966
+11636239 : 1173
+11051489 : 2072
+10805254 : 1449
+10724403 : 823
+9770713 : 1704
 
-Start find shortest path (Dijkstra) for each FACEBOOK vertex to first vertex
+Start find shortest path (Dijkstra) for each FACEBOOK vertex to first vertex 0
 Finish find shortest path (Dijkstra) for each FACEBOOK vertex to first vertex
-Total time 1.387921921 sec
+Total time 1.583919981 sec
 Most expensive (nano sec : vertex):
-11310183 : 966
-10952503 : 588
-3734401 : 62
-3663415 : 355
-3607241 : 59
-3601728 : 373
-3594957 : 354
-3565185 : 69
-3543009 : 64
-3273830 : 65
+18149786 : 1298
+12362451 : 66
+11636338 : 437
+6186346 : 1140
+5326317 : 1185
+4731813 : 1184
+3980240 : 40
+3931464 : 1211
+3898091 : 34
+3869116 : 3
 
-Start find shortest path (BellmanFord) for each FACEBOOK vertex to first vertex
+Start find shortest path (BellmanFord) for each FACEBOOK vertex to first vertex 0
 Finish find shortest path (BellmanFord) for each FACEBOOK vertex to first vertex
-Total time 2.59410259 sec
+Total time 2.6483778 sec
 Most expensive (nano sec : vertex):
-12844234 : 2098
-12595052 : 513
-11561040 : 1040
-10524428 : 1553
-9231487 : 2773
-4574062 : 417
-4436959 : 402
-4118949 : 427
-4091477 : 400
-3960893 : 119
+12303705 : 418
+11199883 : 1441
+11114824 : 951
+10289217 : 1915
+9759144 : 2062
+4631521 : 21
+4584581 : 198
+4274001 : 30
+4143122 : 39
+3794206 : 166
 
-Start find shortest path (Dijkstra) for each FACEBOOK vertex to middle vertex
+Start find shortest path (Dijkstra) for each FACEBOOK vertex to middle vertex 575
 Finish find shortest path (Dijkstra) for each FACEBOOK vertex to middle vertex
-Total time 1.375177051 sec
+Total time 1.255656311 sec
 Most expensive (nano sec : vertex):
-4737180 : 396
-4379746 : 455
-4148243 : 1117
-4030544 : 390
-3904156 : 494
-3857335 : 0
-3674508 : 936
-3673954 : 531
-3662366 : 452
-3578001 : 482
+13868212 : 1952
+10592158 : 991
+3853267 : 0
+3622789 : 427
+3359588 : 1072
+3301647 : 428
+3132620 : 349
+3081290 : 451
+3005862 : 549
+2928850 : 496
 
-Start find shortest path (BellmanFord) for each FACEBOOK vertex to middle vertex
+Start find shortest path (BellmanFord) for each FACEBOOK vertex to middle vertex 575
 Finish find shortest path (BellmanFord) for each FACEBOOK vertex to middle vertex
-Total time 2.776762101 sec
+Total time 2.852300963 sec
 Most expensive (nano sec : vertex):
-5746121 : 377
-5180304 : 362
-4878696 : 350
-4787562 : 361
-4751576 : 444
-4689692 : 522
-4647820 : 349
-4478594 : 387
-4477949 : 352
-4420080 : 354
+6383406 : 396
+6200082 : 400
+5584326 : 1369
+5313677 : 373
+4875096 : 349
+4873142 : 421
+4775543 : 434
+4774569 : 509
+4502250 : 0
+4499507 : 383
 
-Start find shortest path (Dijkstra) for each FACEBOOK vertex to last vertex
+Start find shortest path (Dijkstra) for each FACEBOOK vertex to last vertex 2659
 Finish find shortest path (Dijkstra) for each FACEBOOK vertex to last vertex
-Total time 0.903520382 sec
+Total time 0.947624668 sec
 Most expensive (nano sec : vertex):
-4306160 : 0
-2757729 : 465
-2726090 : 587
-2641385 : 107
-2621504 : 646
-2590784 : 626
-2564919 : 57
-2518790 : 589
-2507936 : 479
-2452666 : 590
+4748367 : 0
+3377452 : 567
+3122628 : 472
+2917808 : 107
+2858765 : 479
+2766575 : 24
+2636948 : 398
+2611321 : 492
+2607529 : 375
+2591064 : 166
 
-Start find shortest path (BellmanFord) for each FACEBOOK vertex to last vertex
+Start find shortest path (BellmanFord) for each FACEBOOK vertex to last vertex 2659
 Finish find shortest path (BellmanFord) for each FACEBOOK vertex to last vertex
-Total time 2.820672145 sec
+Total time 2.836979928 sec
 Most expensive (nano sec : vertex):
-5038398 : 353
-4530937 : 119
-4261924 : 0
-4163616 : 469
-4160779 : 13
-4148238 : 98
-4128967 : 427
-4126565 : 45
-4044692 : 481
-4008318 : 553
+5385119 : 0
+5084422 : 1
+4393213 : 98
+3932658 : 3
+3898394 : 53
+3892002 : 490
+3885208 : 423
+3864709 : 489
+3861253 : 412
+3858216 : 376
