@@ -9,9 +9,6 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-/**
- * Created by valery.kovshov on 16/05/2021.
- */
 public class Postgres {
 
     private static final String URL = "jdbc:postgresql://localhost:6666/postgres";
