@@ -216,8 +216,8 @@ Most expensive (nano sec : vertex):
 6607149 : 130820
 6545146 : 818382
 
-Start find shortest path (Dijkstra) for each AMAZON vertex to last vertex
-Finish find shortest path (Dijkstra) for each AMAZON vertex to last vertex
+Start find shortest path (Dijkstra) for each AMAZON vertex to last vertex (262110)
+Finish find shortest path (Dijkstra) for each AMAZON vertex to last vertex (262110)
 Total time 275.678450638 sec
 Most expensive (nano sec : vertex):
 1060335218 : 52
@@ -321,8 +321,8 @@ Most expensive (nano sec : vertex):
 631891125 : 9840
 630375933 : 129327
 
-Start find shortest path (Dijkstra) for each GOOGLE vertex to last vertex
-Finish find shortest path (Dijkstra) for each GOOGLE vertex to last vertex
+Start find shortest path (Dijkstra) for each GOOGLE vertex to last vertex (875712)
+Finish find shortest path (Dijkstra) for each GOOGLE vertex to last vertex (875712)
 Total time 1137.386958629 sec
 Most expensive (nano sec : vertex):
 1398561205 : 510618
@@ -426,8 +426,8 @@ Most expensive (nano sec : vertex):
 1220924689 : 122003
 1220652730 : 506088
 
-Start find shortest path (BellmanFord) for each AMAZON vertex to last vertex
-Finish find shortest path (BellmanFord) for each AMAZON vertex to last vertex
+Start find shortest path (BellmanFord) for each AMAZON vertex to last vertex (262110)
+Finish find shortest path (BellmanFord) for each AMAZON vertex to last vertex (262110)
 Total time 264.87147031 sec
 Most expensive (nano sec : vertex):
 735340054 : 106
@@ -531,8 +531,8 @@ Most expensive (nano sec : vertex):
 627629845 : 7487
 627505712 : 142419
 
-Start find shortest path (BellmanFord) for each GOOGLE vertex to last vertex
-Finish find shortest path (BellmanFord) for each GOOGLE vertex to last vertex
+Start find shortest path (BellmanFord) for each GOOGLE vertex to last vertex (875712)
+Finish find shortest path (BellmanFord) for each GOOGLE vertex to last vertex (875712)
 Total time 3454.834948081 sec
 Most expensive (nano sec : vertex):
 7291212018 : 7630

@@ -1,0 +1,97 @@
+Start load AMAZON graph
+Finish load AMAZON graph
+Total time 3.16905938 sec
+
+Start load GOOGLE graph
+Finish load GOOGLE graph
+Total time 15.989196876 sec
+
+Start find neighbors for each AMAZON vertex (repeat 100)
+Finish find neighbors for each AMAZON vertex (repeat 100)
+Total time 12.029942021 sec
+Most expensive (nano sec : vertex):
+1088406179 : 101
+624167373 : 4111
+19020593 : 204876
+14942941 : 153405
+14216368 : 86850
+10752232 : 0
+6766847 : 606
+5791024 : 341
+5789454 : 487
+5248471 : 82863
+
+Start find neighbors for each GOOGLE vertex (repeat 100)
+Finish find neighbors for each GOOGLE vertex (repeat 100)
+Total time 30.535657392 sec
+Most expensive (nano sec : vertex):
+31320738 : 668473
+28315271 : 724712
+25922192 : 669332
+24910389 : 605740
+24326397 : 864324
+24211904 : 615110
+22810520 : 752861
+22424265 : 158636
+21311696 : 37715
+21266122 : 84183
+
+Start find shortest path (Dijkstra) for each AMAZON vertex to last vertex (262110)
+Finish find shortest path (Dijkstra) for each AMAZON vertex to last vertex (262110)
+Total time 176.081939059 sec
+Most expensive (nano sec : vertex):
+1366340937 : 239561
+1256545024 : 235478
+1244871392 : 235998
+1177694102 : 231257
+1144218717 : 43849
+1091445887 : 144884
+1071289287 : 120775
+1053899209 : 236421
+1029950287 : 216983
+1018841509 : 71614
+
+Start find shortest path (Dijkstra) for each GOOGLE vertex to last vertex
+Finish find shortest path (Dijkstra) for each GOOGLE vertex to last vertex
+Total time 810.883321268 sec
+Most expensive (nano sec : vertex):
+3708068495 : 649385
+3608346544 : 186736
+3423937645 : 127979
+3250764927 : 540677
+2968525649 : 865237
+2753543614 : 286112
+2752992711 : 906775
+2662320922 : 355715
+2651506906 : 255190
+2581986305 : 482907
+
+Start find shortest path (BellmanFord) for each AMAZON vertex to last vertex (262110)
+Finish find shortest path (BellmanFord) for each AMAZON vertex to last vertex (262110)
+Total time 199.20653869 sec
+Most expensive (nano sec : vertex):
+2390094769 : 101638
+1929431920 : 100076
+1725860399 : 116430
+1526020342 : 114718
+1462018443 : 188216
+1452140721 : 3846
+1397233874 : 94291
+1386366758 : 67110
+1276063191 : 151941
+1266154927 : 127254
+
+Start find shortest path (BellmanFord) for each GOOGLE vertex to last vertex
+Finish find shortest path (BellmanFord) for each GOOGLE vertex to last vertex
+Total time 1764.585330777 sec
+Most expensive (nano sec : vertex):
+6162642183 : 609117
+6052246007 : 455500
+5681257714 : 490824
+5344036238 : 679065
+5212050921 : 648428
+5186888933 : 353690
+4999257333 : 177640
+4980867376 : 503488
+4715548785 : 742058
+4594243253 : 902482

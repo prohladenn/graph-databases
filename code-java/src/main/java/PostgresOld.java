@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-public class Postgres {
+public class PostgresOld {
 
     private static final String URL = "jdbc:postgresql://localhost:6666/postgres";
     private static final Properties PROPERTIES = new Properties() {{

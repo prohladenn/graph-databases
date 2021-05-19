@@ -3,190 +3,154 @@ import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleDirectedGraph;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class JgraphtResearch {
 
-    //https://snap.stanford.edu/data/amazon0302.html
-    public static final Source AMAZON = new Source("AMAZON", new File("db/bigdata/amazon0302.txt"), 262111, 1234877);
-
-    // https://snap.stanford.edu/data/web-Google.html
-    public static final Source GOOGLE = new Source("GOOGLE", new File("db/bigdata/web-Google.txt"), 875713, 5105039);
-
     public static void main(String[] args) throws IOException {
-        final Graph<Integer, DefaultEdge> graphAmazon;
-        final Graph<Integer, DefaultEdge> graphGoogle;
+        // TESTS FOR COLLEGE GRAPH
+        tests(Source.COLLEGE);
 
-        // LOAD GRAPHS
-        {
-            // Time~3 sec
-            System.out.println("Start load AMAZON graph");
-            var t1a = System.nanoTime();
-            graphAmazon = loadGraph(AMAZON);
-            var t2a = System.nanoTime();
-            System.out.println("Finish load AMAZON graph\nTotal time " + ((t2a - t1a) / 1e9) + " sec\n");
+        // TESTS FOR GNUTELLA GRAPH
+        tests(Source.GNUTELLA);
 
-            // Time~15 sec
-            System.out.println("Start load GOOGLE graph");
-            var t1g = System.nanoTime();
-            graphGoogle = loadGraph(GOOGLE);
-            var t2g = System.nanoTime();
-            System.out.println("Finish load GOOGLE graph\nTotal time " + ((t2g - t1g) / 1e9) + " sec\n");
-        }
-
-        // FIND NEIGHBORS
-        {
-            // Time~11 sec
-            findNeighbors(AMAZON, graphAmazon);
-
-            // Time~33 sec
-            findNeighbors(GOOGLE, graphGoogle);
-        }
-
-        // SHORTEST PATH DIJKSTRA
-        {
-            // Time~
-            findDijkstraShortestPath(AMAZON, graphAmazon);
-
-            // Time~
-            findDijkstraShortestPath(GOOGLE, graphGoogle);
-        }
-
-        // SHORTEST PATH BELLMAN FORD
-        {
-            // Time~
-            findBellmanFordShortestPath(AMAZON, graphAmazon);
-
-            // Time~
-            findBellmanFordShortestPath(GOOGLE, graphGoogle);
-        }
+        // TESTS FOR FACEBOOK GRAPH
+        tests(Source.FACEBOOK);
     }
 
-    private static Graph<Integer, DefaultEdge> loadGraph(Source source) throws IOException {
-        if (!source.file.exists()) {
-            throw new FileNotFoundException("File" + source.file.getAbsolutePath() + " not found");
-        }
+    private static void tests(Source source) throws IOException {
+        final Graph<Integer, DefaultEdge> graph = Source.Utils.loadGraph(source);
+        findNeighbors(source, graph);
 
-        if (!source.file.isFile()) {
-            throw new FileNotFoundException("File" + source.file.getAbsolutePath() + " is not a file");
-        }
+        findDijkstraShortestPathToFirst(source, graph);
+        findBellmanFordShortestPathToFirst(source, graph);
 
-        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-        try (BufferedReader br = new BufferedReader(new FileReader(source.file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                int separator = line.indexOf(9);
+        findDijkstraShortestPathToMiddle(source, graph);
+        findBellmanFordShortestPathToMiddle(source, graph);
 
-                int v1 = Integer.parseInt(line.substring(0, separator));
-                int v2 = Integer.parseInt(line.substring(separator + 1));
-
-                graph.addVertex(v1);
-                graph.addVertex(v2);
-
-                graph.addEdge(v1, v2);
-            }
-        }
-
-        if (graph.vertexSet().size() != source.nodes) {
-            throw new IllegalStateException("Nodes expected count " + source.nodes + " but actual count " + graph.vertexSet().size());
-        }
-
-        if (graph.edgeSet().size() != source.edges) {
-            throw new IllegalStateException("Edges expected count " + source.edges + " but actual count " + graph.edgeSet().size());
-        }
-
-        return graph;
+        findDijkstraShortestPathToLast(source, graph);
+        findBellmanFordShortestPathToLast(source, graph);
     }
 
     private static void findNeighbors(Source source, Graph<Integer, DefaultEdge> graph) {
-        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.nodes + 1);
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
 
-        System.out.println("Start find neighbors for each " + source.name + " vertex (repeat 100)");
+        System.out.println("Start find neighbors for each " + source.getName() + " vertex (repeat 1000)");
 
         var global_start = System.nanoTime();
         for (Integer vertex : graph.vertexSet()) {
             var time = System.nanoTime();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1000; i++) {
                 Graphs.neighborListOf(graph, vertex);
             }
             vertexToTime.put(vertex, System.nanoTime() - time);
         }
         var global_finish = System.nanoTime();
 
-        System.out.println("Finish find neighbors for each " + source.name + " vertex (repeat 100)\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+        System.out.println("Finish find neighbors for each " + source.getName() + " vertex (repeat 1000)\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
-        reportTop100(vertexToTime);
+        reportTop10(vertexToTime);
     }
 
-    private static void findDijkstraShortestPath(Source source, Graph<Integer, DefaultEdge> graph) {
-        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.nodes + 1);
+    private static void findDijkstraShortestPathToFirst(Source source, Graph<Integer, DefaultEdge> graph) {
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
 
-        System.out.println("Start find shortest path (Dijkstra) for each " + source.name + " vertex to last vertex");
-
+        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to first vertex");
         var global_start = System.nanoTime();
+        findDijkstraShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[0], vertexToTime);
+        var global_finish = System.nanoTime();
+        System.out.println("Finish find shortest path (Dijkstra) for each " + source.getName() + " vertex to first vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+
+        reportTop10(vertexToTime);
+    }
+
+    private static void findDijkstraShortestPathToMiddle(Source source, Graph<Integer, DefaultEdge> graph) {
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+
+        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to middle vertex");
+        var global_start = System.nanoTime();
+        findDijkstraShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() / 2], vertexToTime);
+        var global_finish = System.nanoTime();
+        System.out.println("Finish find shortest path (Dijkstra) for each " + source.getName() + " vertex to middle vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+
+        reportTop10(vertexToTime);
+    }
+
+    private static void findDijkstraShortestPathToLast(Source source, Graph<Integer, DefaultEdge> graph) {
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+
+        System.out.println("Start find shortest path (Dijkstra) for each " + source.getName() + " vertex to last vertex");
+        var global_start = System.nanoTime();
+        findDijkstraShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() - 1], vertexToTime);
+        var global_finish = System.nanoTime();
+        System.out.println("Finish find shortest path (Dijkstra) for each " + source.getName() + " vertex to last vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+
+        reportTop10(vertexToTime);
+    }
+
+    private static void findDijkstraShortestPathTo(Graph<Integer, DefaultEdge> graph, int to, Map<Integer, Long> vertexToTime) {
         for (Integer vertex : graph.vertexSet()) {
-            if (new Random().nextInt(501) != 10) continue;
             var time = System.nanoTime();
-            new DijkstraShortestPath<>(graph).getPath(vertex, source.nodes - 1);
+            new DijkstraShortestPath<>(graph).getPath(vertex, to);
             vertexToTime.put(vertex, System.nanoTime() - time);
         }
-        var global_finish = System.nanoTime();
-
-        System.out.println("Finish find shortest path (Dijkstra) for each " + source.name + " vertex to last vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
-
-        reportTop100(vertexToTime);
     }
 
-    private static void findBellmanFordShortestPath(Source source, Graph<Integer, DefaultEdge> graph) {
-        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.nodes + 1);
+    private static void findBellmanFordShortestPathToFirst(Source source, Graph<Integer, DefaultEdge> graph) {
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
 
-        System.out.println("Start find shortest path (BellmanFord) for each " + source.name + " vertex to last vertex");
-
+        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to first vertex");
         var global_start = System.nanoTime();
+        findBellmanFordShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[0], vertexToTime);
+        var global_finish = System.nanoTime();
+        System.out.println("Finish find shortest path (BellmanFord) for each " + source.getName() + " vertex to first vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+
+        reportTop10(vertexToTime);
+    }
+
+    private static void findBellmanFordShortestPathToMiddle(Source source, Graph<Integer, DefaultEdge> graph) {
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+
+        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to middle vertex");
+        var global_start = System.nanoTime();
+        findBellmanFordShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() / 2], vertexToTime);
+        var global_finish = System.nanoTime();
+        System.out.println("Finish find shortest path (BellmanFord) for each " + source.getName() + " vertex to middle vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+
+        reportTop10(vertexToTime);
+    }
+
+    private static void findBellmanFordShortestPathToLast(Source source, Graph<Integer, DefaultEdge> graph) {
+        HashMap<Integer, Long> vertexToTime = new HashMap<>(source.getNodes() + 1);
+
+        System.out.println("Start find shortest path (BellmanFord) for each " + source.getName() + " vertex to last vertex");
+        var global_start = System.nanoTime();
+        findBellmanFordShortestPathTo(graph, graph.vertexSet().toArray(Integer[]::new)[source.getNodes() - 1], vertexToTime);
+        var global_finish = System.nanoTime();
+        System.out.println("Finish find shortest path (BellmanFord) for each " + source.getName() + " vertex to last vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+
+        reportTop10(vertexToTime);
+    }
+
+    private static void findBellmanFordShortestPathTo(Graph<Integer, DefaultEdge> graph, int to, Map<Integer, Long> vertexToTime) {
         for (Integer vertex : graph.vertexSet()) {
-            if (new Random().nextInt(501) != 10) continue;
             var time = System.nanoTime();
-            new BellmanFordShortestPath<>(graph).getPath(vertex, source.nodes - 1);
+            new BellmanFordShortestPath<>(graph).getPath(vertex, to);
             vertexToTime.put(vertex, System.nanoTime() - time);
         }
-        var global_finish = System.nanoTime();
-
-        System.out.println("Finish find shortest path (BellmanFord) for each " + source.name + " vertex to last vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
-
-        reportTop100(vertexToTime);
     }
 
-    private static void reportTop100(HashMap<Integer, Long> vertexToTime) {
+    private static void reportTop10(HashMap<Integer, Long> vertexToTime) {
         System.out.println("Most expensive (nano sec : vertex):");
         vertexToTime.entrySet().stream()
                 .sorted(Collections.reverseOrder(Comparator.comparingLong(Map.Entry::getValue)))
-                .limit(100)
+                .limit(10)
                 .forEach(entry -> System.out.println(entry.getValue() + " : " + entry.getKey()));
         System.out.println();
-    }
-
-    static class Source {
-        private final String name;
-        private final File file;
-        private final int nodes;
-        private final int edges;
-
-        public Source(String name, File file, int nodes, int edges) {
-            this.name = name;
-            this.file = file;
-            this.nodes = nodes;
-            this.edges = edges;
-        }
     }
 }
