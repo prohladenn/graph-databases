@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class JgraphtResearch {
 
@@ -29,7 +30,7 @@ public class JgraphtResearch {
 
         // LOAD GRAPHS
         {
-            // Time~2.8 sec
+            // Time~3 sec
             System.out.println("Start load AMAZON graph");
             var t1a = System.nanoTime();
             graphAmazon = loadGraph(AMAZON);
@@ -46,10 +47,10 @@ public class JgraphtResearch {
 
         // FIND NEIGHBORS
         {
-            // Time~1 sec
+            // Time~11 sec
             findNeighbors(AMAZON, graphAmazon);
 
-            // Time~2 sec
+            // Time~33 sec
             findNeighbors(GOOGLE, graphGoogle);
         }
 
@@ -111,17 +112,19 @@ public class JgraphtResearch {
     private static void findNeighbors(Source source, Graph<Integer, DefaultEdge> graph) {
         HashMap<Integer, Long> vertexToTime = new HashMap<>(source.nodes + 1);
 
-        System.out.println("Start find neighbors for each " + source.name + " vertex");
+        System.out.println("Start find neighbors for each " + source.name + " vertex (repeat 100)");
 
         var global_start = System.nanoTime();
         for (Integer vertex : graph.vertexSet()) {
             var time = System.nanoTime();
-            Graphs.neighborListOf(graph, vertex);
+            for (int i = 0; i < 100; i++) {
+                Graphs.neighborListOf(graph, vertex);
+            }
             vertexToTime.put(vertex, System.nanoTime() - time);
         }
         var global_finish = System.nanoTime();
 
-        System.out.println("Finish find neighbors for each " + source.name + " vertex\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
+        System.out.println("Finish find neighbors for each " + source.name + " vertex (repeat 100)\nTotal time " + ((global_finish - global_start) / 1e9) + " sec");
 
         reportTop100(vertexToTime);
     }
@@ -133,6 +136,7 @@ public class JgraphtResearch {
 
         var global_start = System.nanoTime();
         for (Integer vertex : graph.vertexSet()) {
+            if (new Random().nextInt(501) != 10) continue;
             var time = System.nanoTime();
             new DijkstraShortestPath<>(graph).getPath(vertex, source.nodes - 1);
             vertexToTime.put(vertex, System.nanoTime() - time);
@@ -151,6 +155,7 @@ public class JgraphtResearch {
 
         var global_start = System.nanoTime();
         for (Integer vertex : graph.vertexSet()) {
+            if (new Random().nextInt(501) != 10) continue;
             var time = System.nanoTime();
             new BellmanFordShortestPath<>(graph).getPath(vertex, source.nodes - 1);
             vertexToTime.put(vertex, System.nanoTime() - time);
