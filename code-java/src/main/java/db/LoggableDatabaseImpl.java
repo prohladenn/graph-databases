@@ -1,6 +1,5 @@
 package db;
 
-import db.Database;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -14,9 +13,8 @@ public class LoggableDatabaseImpl implements Database {
         this.database = database;
     }
 
-    @Override
-    public void close() throws Exception {
-        database.close();
+    private double trackTimeSec(long t) {
+        return (System.nanoTime() - t) / 1e9;
     }
 
     @Override
@@ -26,22 +24,6 @@ public class LoggableDatabaseImpl implements Database {
         var result = database.selectAll();
         System.out.println("Select completed with size " + result.size() + "\nTime " + trackTimeSec(t) + " sec \n");
         return result;
-    }
-
-    @Override
-    public void removeAll() throws Exception {
-        System.out.println("Operation 'removeAll'");
-        var t = System.nanoTime();
-        database.removeAll();
-        System.out.println("Remove completed\nTime " + trackTimeSec(t) + " sec \n");
-    }
-
-    @Override
-    public void createGraph(Graph<Integer, DefaultEdge> graph) throws Exception {
-        System.out.println("Operation 'createGraph'");
-        var t = System.nanoTime();
-        database.createGraph(graph);
-        System.out.println("Graph created\nTime " + trackTimeSec(t) + " sec \n");
     }
 
     @Override
@@ -62,7 +44,24 @@ public class LoggableDatabaseImpl implements Database {
         return result;
     }
 
-    private double trackTimeSec(long t) {
-        return (System.nanoTime() - t) / 1e9;
+    @Override
+    public void removeAll() throws Exception {
+        System.out.println("Operation 'removeAll'");
+        var t = System.nanoTime();
+        database.removeAll();
+        System.out.println("Remove completed\nTime " + trackTimeSec(t) + " sec \n");
+    }
+
+    @Override
+    public void createGraph(Graph<Integer, DefaultEdge> graph) throws Exception {
+        System.out.println("Operation 'createGraph'");
+        var t = System.nanoTime();
+        database.createGraph(graph);
+        System.out.println("Graph created\nTime " + trackTimeSec(t) + " sec \n");
+    }
+
+    @Override
+    public void close() throws Exception {
+        database.close();
     }
 }
