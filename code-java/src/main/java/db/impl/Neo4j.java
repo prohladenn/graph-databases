@@ -17,8 +17,8 @@ import java.util.stream.StreamSupport;
 
 public class Neo4j implements Database, Loggable {
     private static final String SELECT_ALL = "" +
-            "MATCH (n) " +
-            "RETURN n;";
+            "MATCH (n) -[r]-> (m) " +
+            "RETURN r;";
     private static final String DELETE_ALL = "" +
             "MATCH (n) " +
             "DETACH DELETE n;";

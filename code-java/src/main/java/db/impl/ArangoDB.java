@@ -12,8 +12,11 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ArangoDB implements Database, Loggable {
 
@@ -56,30 +59,31 @@ public class ArangoDB implements Database, Loggable {
         arangoDB.shutdown();
     }
 
+    private <T> List<T> executeQuery(String q, Class<T> tClass) throws Exception {
+        List<T> result = new ArrayList<>();
+        var arangoCursor = db.query(q, String.class);
+        while (arangoCursor.hasNext()) {
+            var row = arangoCursor.next();
+            Object[] cells = row.replaceAll("[\\[\\]\"]", "").split(",");
+            var params = Collections.nCopies(cells.length, String.class).toArray(Class[]::new);
+            result.add(tClass.getConstructor(params).newInstance(cells));
+        }
+        return result;
+    }
+
     @Override
-    public List<?> selectAll() {
+    public List<?> selectAll() throws Exception {
         var nodes = getAllNodes();
+        var edges = getAllEdges();
         return getAllEdges();
     }
 
-    private List<String> getAllNodes() {
-        List<String> result = new ArrayList<>();
-        String queryString = "FOR node IN nodes RETURN node";
-        var arangoCursor = db.query(queryString, String.class);
-        while (arangoCursor.hasNext()) {
-            result.add(arangoCursor.next());
-        }
-        return result;
+    private List<Node> getAllNodes() throws Exception {
+        return executeQuery("FOR node IN nodes RETURN [node._id, node._key]", Node.class);
     }
 
-    private List<String> getAllEdges() {
-        List<String> result = new ArrayList<>();
-        String queryString = "FOR edge IN edges RETURN edge";
-        var arangoCursor = db.query(queryString, String.class);
-        while (arangoCursor.hasNext()) {
-            result.add(arangoCursor.next());
-        }
-        return result;
+    private List<NodeEdge> getAllEdges() throws Exception {
+        return executeQuery("FOR edge IN edges RETURN [edge._id, edge._from, edge._to]", NodeEdge.class);
     }
 
     @Override
@@ -112,39 +116,40 @@ public class ArangoDB implements Database, Loggable {
     }
 
     @Override
-    public List<?> shortestPath(Integer v1, Integer v2) {
-        return null;
+    public List<?> shortestPath(Integer v1, Integer v2) throws Exception {
+        String q = String.format("FOR v IN OUTBOUND SHORTEST_PATH 'nodes/%d' TO 'nodes/%d' GRAPH 'graph' RETURN [v._id, v._key]", v1, v2);
+        return executeQuery(q, Node.class);
     }
 
     @Override
-    public List<?> nearestNeighbors(Integer v, int level) {
-        return null;
+    public List<?> nearestNeighbors(Integer v, int level) throws Exception {
+        String qIn = String.format("FOR v IN 1..%d INBOUND 'nodes/%d' GRAPH 'graph' RETURN v._key", level, v);
+        String qOut = String.format("FOR v IN 1..%d OUTBOUND 'nodes/%d' GRAPH 'graph' RETURN v._key", level, v);
+        return Stream.concat(
+                executeQuery(qIn, Integer.class).stream(),
+                executeQuery(qOut, Integer.class).stream()
+        ).distinct().sorted().collect(Collectors.toList());
     }
 
     private static class Node {
         @DocumentField(Type.ID)
         private String id;
         @DocumentField(Type.KEY)
-        private String value;
+        private final String value;
+
+        @SuppressWarnings({"unused", "RedundantSuppression"}) //Used vie reflection
+        public Node(String id, String value) {
+            this.id = id;
+            this.value = value;
+        }
 
         public Node(Integer value) {
             this.value = String.valueOf(value);
         }
 
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getValue() {
+        @Override
+        public String toString() {
             return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
         }
     }
 
@@ -152,37 +157,25 @@ public class ArangoDB implements Database, Loggable {
         @DocumentField(Type.ID)
         private String id;
         @DocumentField(Type.FROM)
-        private String from;
+        private final String from;
         @DocumentField(Type.TO)
-        private String to;
+        private final String to;
+
+        @SuppressWarnings({"unused", "RedundantSuppression"}) //Used vie reflection
+        public NodeEdge(String id, String from, String to) {
+            this.id = id;
+            this.from = from;
+            this.to = to;
+        }
 
         public NodeEdge(String from, String to) {
             this.from = from;
             this.to = to;
         }
 
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getFrom() {
-            return from;
-        }
-
-        public void setFrom(String from) {
-            this.from = from;
-        }
-
-        public String getTo() {
-            return to;
-        }
-
-        public void setTo(String to) {
-            this.to = to;
+        @Override
+        public String toString() {
+            return String.format("(%s : %s)", from, to);
         }
     }
 }

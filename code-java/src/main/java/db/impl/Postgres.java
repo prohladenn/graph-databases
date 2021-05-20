@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Postgres implements Database, Loggable {
@@ -101,16 +102,11 @@ public class Postgres implements Database, Loggable {
     public List<?> nearestNeighbors(Integer v, int level) throws SQLException {
         var data = selectAllImpl();
         var graph = loadGraph(data);
-        var result = new HashSet<Integer>();
-        var newNeighbors = new HashSet<>(Graphs.neighborListOf(graph, v));
-        for (int l = 1; l < level; l++) {
-            var tmp = new HashSet<Integer>();
-            newNeighbors.forEach(i -> tmp.addAll(Graphs.neighborListOf(graph, i)));
-            result.addAll(newNeighbors);
-            newNeighbors = tmp;
+        var result = new HashSet<>(Graphs.neighborListOf(graph, v));
+        for (int i = 1; i < level; i++) {
+            Set.copyOf(result).forEach(v1 -> result.addAll(Graphs.neighborListOf(graph, v1)));
         }
-        result.addAll(newNeighbors);
-        return result.stream().sorted().collect(Collectors.toList());
+        return result.stream().distinct().sorted().collect(Collectors.toList());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class LoggableDatabaseImpl implements Database {
         System.out.println("Operation 'selectAll'");
         var t = System.nanoTime();
         var result = database.selectAll();
-        System.out.println("Select completed with size " + result.size() + " time " + trackTimeSec(t) + " sec \n");
+        System.out.println("Select completed with size " + result.size() + "\nTime " + trackTimeSec(t) + " sec \n");
         return result;
     }
 
@@ -33,7 +33,7 @@ public class LoggableDatabaseImpl implements Database {
         System.out.println("Operation 'removeAll'");
         var t = System.nanoTime();
         database.removeAll();
-        System.out.println("Remove completed " + trackTimeSec(t) + " sec \n");
+        System.out.println("Remove completed\nTime " + trackTimeSec(t) + " sec \n");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class LoggableDatabaseImpl implements Database {
         System.out.println("Operation 'createGraph'");
         var t = System.nanoTime();
         database.createGraph(graph);
-        System.out.println("Graph created " + trackTimeSec(t) + " sec \n");
+        System.out.println("Graph created\nTime " + trackTimeSec(t) + " sec \n");
     }
 
     @Override
@@ -49,7 +49,7 @@ public class LoggableDatabaseImpl implements Database {
         System.out.println("Operation 'shortestPath'");
         var t = System.nanoTime();
         var result = database.shortestPath(v1, v2);
-        System.out.println("Shortest path length " + result.size() + " time " + trackTimeSec(t) + " sec \n");
+        System.out.println("Shortest path length " + result.size() + "\nTime " + trackTimeSec(t) + " sec \n");
         return result;
     }
 
@@ -58,7 +58,7 @@ public class LoggableDatabaseImpl implements Database {
         System.out.println("Operation 'nearestNeighbors'");
         var t = System.nanoTime();
         var result = database.nearestNeighbors(v, level);
-        System.out.println("Nearest neighbors size " + result.size() + " time " + trackTimeSec(t) + " sec \n");
+        System.out.println("Nearest neighbors size " + result.size() + "\nTime " + trackTimeSec(t) + " sec \n");
         return result;
     }
 
