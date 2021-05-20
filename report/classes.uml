@@ -3,55 +3,95 @@
   <ID>JAVA</ID>
   <OriginalElement>db</OriginalElement>
   <nodes>
-    <node x="726.0" y="201.0">db.ArangoDB</node>
-    <node x="322.75" y="44.0">db.Loggable</node>
-    <node x="363.0" y="201.0">db.Postgres</node>
-    <node x="768.875" y="0.0">db.Database</node>
-    <node x="1089.0" y="212.0">db.LoggableDatabaseImpl</node>
-    <node x="0.0" y="201.0">db.Neo4j</node>
+    <node x="0.0" y="527.0">db.ArangoDB</node>
+    <node x="414.0" y="414.0">db.Loggable</node>
+    <node x="363.0" y="527.0">db.Postgres</node>
+    <node x="447.8333333333334" y="0.0">db.Database</node>
+    <node x="505.0" y="191.0">db.LoggableDatabaseImpl</node>
+    <node x="726.0" y="527.0">db.Neo4j</node>
   </nodes>
   <notes />
   <edges>
+    <edge source="db.Postgres" target="db.LoggableDatabaseImpl">
+      <point x="128.625" y="-92.5" />
+      <point x="663.125" y="507.0" />
+      <point x="730.75" y="507.0" />
+      <point x="730.75" y="394.0" />
+      <point x="725.5" y="394.0" />
+      <point x="49.0" y="81.5" />
+    </edge>
     <edge source="db.Neo4j" target="db.Database">
-      <point x="85.75" y="-92.5" />
-      <point x="257.25" y="171.0" />
-      <point x="811.75" y="171.0" />
-      <point x="-128.625" y="70.5" />
+      <point x="128.625" y="-92.5" />
+      <point x="1026.125" y="507.0" />
+      <point x="980.5046296296297" y="507.0" />
+      <point x="980.5046296296297" y="161.0" />
+      <point x="762.25" y="161.0" />
+      <point x="142.91666666666652" y="70.5" />
     </edge>
     <edge source="db.LoggableDatabaseImpl" target="db.Database">
-      <point x="0.0" y="-81.5" />
-      <point x="1260.5" y="181.0" />
-      <point x="1069.0" y="181.0" />
-      <point x="128.625" y="70.5" />
+      <point x="114.33333333333337" y="-81.5" />
+      <point x="790.8333333333334" y="171.0" />
+      <point x="705.0833333333335" y="171.0" />
+      <point x="85.75" y="70.5" />
     </edge>
     <edge source="db.Postgres" target="db.Loggable">
-      <point x="-85.75" y="-92.5" />
+      <point x="-42.875" y="-92.5" />
+      <point x="491.625" y="507.0" />
+      <point x="540.0" y="507.0" />
       <point x="0.0" y="26.5" />
     </edge>
-    <edge source="db.Postgres" target="db.Database">
-      <point x="85.75" y="-92.5" />
-      <point x="620.25" y="181.0" />
-      <point x="897.5" y="181.0" />
-      <point x="-42.875" y="70.5" />
+    <edge source="db.ArangoDB" target="db.LoggableDatabaseImpl">
+      <point x="-42.875" y="-92.5" />
+      <point x="128.625" y="497.0" />
+      <point x="226.19675925925924" y="497.0" />
+      <point x="226.19675925925924" y="374.0" />
+      <point x="529.5" y="374.0" />
+      <point x="-147.0" y="81.5" />
     </edge>
-    <edge source="db.ArangoDB" target="db.Loggable">
-      <point x="-85.75" y="-92.5" />
-      <point x="811.75" y="161.0" />
-      <point x="532.75" y="161.0" />
-      <point x="84.0" y="26.5" />
+    <edge source="db.Neo4j" target="db.LoggableDatabaseImpl">
+      <point x="42.875" y="-92.5" />
+      <point x="940.375" y="507.0" />
+      <point x="957.5046296296297" y="507.0" />
+      <point x="957.5046296296297" y="384.0" />
+      <point x="823.5" y="384.0" />
+      <point x="147.0" y="81.5" />
+    </edge>
+    <edge source="db.Postgres" target="db.Database">
+      <point x="-128.625" y="-92.5" />
+      <point x="405.875" y="487.0" />
+      <point x="203.19675925925924" y="487.0" />
+      <point x="203.19675925925924" y="171.0" />
+      <point x="533.5833333333335" y="171.0" />
+      <point x="-85.75" y="70.5" />
     </edge>
     <edge source="db.ArangoDB" target="db.Database">
-      <point x="85.75" y="-92.5" />
-      <point x="42.875" y="70.5" />
+      <point x="-128.625" y="-92.5" />
+      <point x="42.875" y="487.0" />
+      <point x="180.62962962962968" y="487.0" />
+      <point x="180.62962962962968" y="161.0" />
+      <point x="476.4166666666668" y="161.0" />
+      <point x="-142.91666666666663" y="70.5" />
     </edge>
-    <edge source="db.Neo4j" target="db.Loggable">
-      <point x="-85.75" y="-92.5" />
-      <point x="85.75" y="161.0" />
-      <point x="364.75" y="161.0" />
+    <edge source="db.ArangoDB" target="db.Loggable">
+      <point x="128.625" y="-92.5" />
+      <point x="300.125" y="507.0" />
+      <point x="456.0" y="507.0" />
       <point x="-84.0" y="26.5" />
     </edge>
+    <edge source="db.Neo4j" target="db.Loggable">
+      <point x="-128.625" y="-92.5" />
+      <point x="768.875" y="487.0" />
+      <point x="624.0" y="487.0" />
+      <point x="84.0" y="26.5" />
+    </edge>
+    <edge source="db.Loggable" target="db.LoggableDatabaseImpl">
+      <point x="0.0" y="-26.5" />
+      <point x="540.0" y="394.0" />
+      <point x="627.5" y="394.0" />
+      <point x="-49.0" y="81.5" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="1.0" x="716.0" y="193.0" />
+  <settings layout="Hierarchic Group" zoom="0.8306010928961749" x="534.5" y="356.0" />
   <SelectedNodes />
   <Categories>
     <Category>Methods</Category>
