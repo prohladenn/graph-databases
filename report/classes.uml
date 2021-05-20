@@ -3,26 +3,20 @@
   <ID>JAVA</ID>
   <OriginalElement>db</OriginalElement>
   <nodes>
-    <node x="414.0" y="414.0">db.Loggable</node>
-    <node x="447.8333333333334" y="0.0">db.Database</node>
-    <node x="505.0" y="191.0">db.LoggableDatabaseImpl</node>
+    <node x="0.0" y="197.0">db.Loggable</node>
+    <node x="42.0" y="0.0">db.Database</node>
+    <node x="0.0" y="101.0">db.LoggableDatabaseImpl</node>
   </nodes>
   <notes />
   <edges>
     <edge source="db.LoggableDatabaseImpl" target="db.Database">
-      <point x="114.33333333333337" y="-81.5" />
-      <point x="790.8333333333334" y="171.0" />
-      <point x="705.0833333333335" y="171.0" />
-      <point x="85.75" y="70.5" />
+      <point x="0.0" y="-25.5" />
+      <point x="0.0" y="25.5" />
     </edge>
   </edges>
   <settings layout="Hierarchic Group" zoom="1.0" x="631.0" y="233.5" />
-  <SelectedNodes>
-    <node>db.Loggable</node>
-  </SelectedNodes>
-  <Categories>
-    <Category>Methods</Category>
-  </Categories>
+  <SelectedNodes />
+  <Categories />
   <SCOPE>All</SCOPE>
   <VISIBILITY>public</VISIBILITY>
 </Diagram>
