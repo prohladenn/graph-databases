@@ -1,8 +1,11 @@
+package research;
+
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
+import util.Source;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -10,7 +13,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JgraphtResearch {
+public class ResearchJgraphtTime {
 
     public static void main(String[] args) throws IOException {
         // TESTS FOR COLLEGE GRAPH

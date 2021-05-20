@@ -1,3 +1,5 @@
+package util;
+
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
@@ -80,7 +82,7 @@ public class Source {
         return edges;
     }
 
-    static class Utils {
+    public static class Utils {
         public static Graph<Integer, DefaultEdge> loadGraph(Source source) throws IOException {
 
             System.out.println("Start load " + source.getName() + " graph");
