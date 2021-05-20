@@ -1,4 +1,4 @@
-package db.impl;
+package db;
 
 import com.arangodb.ArangoDatabase;
 import com.arangodb.ArangoGraph;
@@ -6,8 +6,6 @@ import com.arangodb.entity.DocumentField;
 import com.arangodb.entity.DocumentField.Type;
 import com.arangodb.entity.EdgeDefinition;
 import com.arangodb.entity.VertexEntity;
-import db.Database;
-import db.Loggable;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 

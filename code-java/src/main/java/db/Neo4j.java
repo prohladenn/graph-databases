@@ -1,7 +1,5 @@
-package db.impl;
+package db;
 
-import db.Database;
-import db.Loggable;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.neo4j.driver.AuthTokens;

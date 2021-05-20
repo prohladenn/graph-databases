@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>db</OriginalElement>
+  <nodes>
+    <node x="726.0" y="201.0">db.ArangoDB</node>
+    <node x="322.75" y="44.0">db.Loggable</node>
+    <node x="363.0" y="201.0">db.Postgres</node>
+    <node x="768.875" y="0.0">db.Database</node>
+    <node x="1089.0" y="212.0">db.LoggableDatabaseImpl</node>
+    <node x="0.0" y="201.0">db.Neo4j</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="db.Neo4j" target="db.Database">
+      <point x="85.75" y="-92.5" />
+      <point x="257.25" y="171.0" />
+      <point x="811.75" y="171.0" />
+      <point x="-128.625" y="70.5" />
+    </edge>
+    <edge source="db.LoggableDatabaseImpl" target="db.Database">
+      <point x="0.0" y="-81.5" />
+      <point x="1260.5" y="181.0" />
+      <point x="1069.0" y="181.0" />
+      <point x="128.625" y="70.5" />
+    </edge>
+    <edge source="db.Postgres" target="db.Loggable">
+      <point x="-85.75" y="-92.5" />
+      <point x="0.0" y="26.5" />
+    </edge>
+    <edge source="db.Postgres" target="db.Database">
+      <point x="85.75" y="-92.5" />
+      <point x="620.25" y="181.0" />
+      <point x="897.5" y="181.0" />
+      <point x="-42.875" y="70.5" />
+    </edge>
+    <edge source="db.ArangoDB" target="db.Loggable">
+      <point x="-85.75" y="-92.5" />
+      <point x="811.75" y="161.0" />
+      <point x="532.75" y="161.0" />
+      <point x="84.0" y="26.5" />
+    </edge>
+    <edge source="db.ArangoDB" target="db.Database">
+      <point x="85.75" y="-92.5" />
+      <point x="42.875" y="70.5" />
+    </edge>
+    <edge source="db.Neo4j" target="db.Loggable">
+      <point x="-85.75" y="-92.5" />
+      <point x="85.75" y="161.0" />
+      <point x="364.75" y="161.0" />
+      <point x="-84.0" y="26.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="716.0" y="193.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

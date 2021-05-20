@@ -1,7 +1,5 @@
-package db.impl;
+package db;
 
-import db.Database;
-import db.Loggable;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;

@@ -1,4 +1,4 @@
-package util;
+package data;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -25,24 +25,21 @@ public class Source {
     }
 
     // https://snap.stanford.edu/data/CollegeMsg.html (Temporal network)
-    // [neo4j 22 sec]
-    public static final Source COLLEGE = new Source("COLLEGE", new File("db/bigdata/CollegeMsg.txt"), 1899, 20296);
+    public static final Source COLLEGE = new Source("COLLEGE", new File(Source.class.getResource("CollegeMsg.txt").getPath()), 1899, 20296);
 
     // https://snap.stanford.edu/data/p2p-Gnutella05.html (Internet peer-to-peer network)
-    // [neo4j 45 sec]
-    public static final Source GNUTELLA = new Source("GNUTELLA", new File("db/bigdata/p2p-Gnutella05.txt"), 8846, 31839);
+    public static final Source GNUTELLA = new Source("GNUTELLA", new File(Source.class.getResource("p2p-Gnutella05.txt").getPath()), 8846, 31839);
 
     // https://snap.stanford.edu/data/ego-Facebook.html (Social network)
-    // [neo4j 55 sec]
-    public static final Source FACEBOOK = new Source("FACEBOOK", new File("db/bigdata/facebook_combined.txt"), 3483, 50865);
+    public static final Source FACEBOOK = new Source("FACEBOOK", new File(Source.class.getResource("facebook_combined.txt").getPath()), 3483, 50865);
 
     @Deprecated // To big
     // https://snap.stanford.edu/data/amazon0302.html (Product co-purchasing network)
-    public static final Source AMAZON = new Source("AMAZON", new File("db/bigdata/amazon0302.txt"), 262111, 1234877);
+    public static final Source AMAZON = new Source("AMAZON", new File(Source.class.getResource("amazon0302.txt").getPath()), 262111, 1234877);
 
     @Deprecated // To big
     // https://snap.stanford.edu/data/web-Google.html (Web graph)
-    public static final Source GOOGLE = new Source("GOOGLE", new File("db/bigdata/web-Google.txt"), 875713, 5105039);
+    public static final Source GOOGLE = new Source("GOOGLE", new File(Source.class.getResource("web-Google.txt").getPath()), 875713, 5105039);
 
     public static Graph<Integer, DefaultEdge> loadGraphCollege() throws IOException {
         return Utils.loadGraph(COLLEGE);

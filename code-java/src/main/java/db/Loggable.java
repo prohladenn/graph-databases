@@ -1,7 +1,5 @@
 package db;
 
-import db.impl.LoggableDatabaseImpl;
-
 public interface Loggable {
 
     /**

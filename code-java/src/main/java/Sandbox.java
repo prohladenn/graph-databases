@@ -1,9 +1,9 @@
-import db.impl.ArangoDB;
-import db.impl.Neo4j;
-import db.impl.Postgres;
+import db.ArangoDB;
+import db.Neo4j;
+import db.Postgres;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
-import util.Source;
+import data.Source;
 
 public class Sandbox {
     public static void main(String[] args) throws Exception {

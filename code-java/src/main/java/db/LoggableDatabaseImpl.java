@@ -1,4 +1,4 @@
-package db.impl;
+package db;
 
 import db.Database;
 import org.jgrapht.Graph;
