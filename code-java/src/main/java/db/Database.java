@@ -15,18 +15,6 @@ public interface Database extends AutoCloseable {
     List<?> selectAll() throws Exception;
 
     /**
-     * Remove all nodes and edges from the database.
-     */
-    void removeAll() throws Exception;
-
-    /**
-     * Creates in the database a graph identical to the input.
-     *
-     * @param graph input graph.
-     */
-    void createGraph(Graph<Integer, DefaultEdge> graph) throws Exception;
-
-    /**
      * Find the shortest path between two nodes of a graph.
      *
      * @param v1 first node id.
@@ -44,4 +32,15 @@ public interface Database extends AutoCloseable {
      */
     List<?> nearestNeighbors(Integer v, int level) throws Exception;
 
+    /**
+     * Remove all nodes and edges from the database.
+     */
+    void removeAll() throws Exception;
+
+    /**
+     * Creates in the database a graph identical to the input.
+     *
+     * @param graph input graph.
+     */
+    void createGraph(Graph<Integer, DefaultEdge> graph) throws Exception;
 }

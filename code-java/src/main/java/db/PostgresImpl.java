@@ -18,7 +18,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Postgres implements Database, Loggable {
+public class PostgresImpl implements Database, Loggable {
 
     private static final String CREATE_IF_NOT_EXIST = "" +
             "CREATE TABLE IF NOT EXISTS triple (" +
@@ -27,8 +27,6 @@ public class Postgres implements Database, Loggable {
             "    object    integer NOT NULL," +
             "    PRIMARY KEY (subject, predicate, object)" +
             ");";
-    private static final String SELECT_ALL = "SELECT * FROM triple";
-    private static final String DELETE_ALL = "TRUNCATE triple";
 
     private static final String URL = "jdbc:postgresql://localhost:6666/postgres";
     private static final Properties PROPERTIES = new Properties() {{
@@ -39,7 +37,7 @@ public class Postgres implements Database, Loggable {
     private final Connection connection;
     private final Statement statement;
 
-    public Postgres() throws SQLException {
+    public PostgresImpl() throws SQLException {
         this.connection = DriverManager.getConnection(URL, PROPERTIES);
         this.statement = connection.createStatement();
         statement.execute(CREATE_IF_NOT_EXIST);
@@ -51,32 +49,12 @@ public class Postgres implements Database, Loggable {
     }
 
     private List<Pair<Integer, Integer>> selectAllImpl() throws SQLException {
-        var resultSet = statement.executeQuery(SELECT_ALL);
+        var resultSet = statement.executeQuery("SELECT * FROM triple");
         var result = new ArrayList<Pair<Integer, Integer>>(resultSet.getMetaData().getColumnCount());
         while (resultSet.next()) {
             result.add(new Pair<>(resultSet.getInt(1), resultSet.getInt(3)));
         }
         return result;
-    }
-
-    @Override
-    public void removeAll() throws SQLException {
-        statement.executeUpdate(DELETE_ALL);
-    }
-
-    @Override
-    public void createGraph(Graph<Integer, DefaultEdge> graph) throws SQLException {
-        String values = graph.edgeSet()
-                .stream()
-                .map(edge -> {
-                    var v1 = graph.getEdgeSource(edge);
-                    var v2 = graph.getEdgeTarget(edge);
-                    return String.format("(%d, 0, %d)", v1, v2);
-                })
-                .collect(Collectors.joining(", "));
-
-        String query = "INSERT INTO triple VALUES " + values;
-        statement.executeUpdate(query);
     }
 
     private Graph<Integer, DefaultEdge> loadGraph(List<Pair<Integer, Integer>> data) {
@@ -108,13 +86,33 @@ public class Postgres implements Database, Loggable {
     }
 
     @Override
-    public LoggableDatabaseImpl loggable() {
-        return new LoggableDatabaseImpl(this);
+    public void removeAll() throws SQLException {
+        statement.executeUpdate("TRUNCATE triple");
+    }
+
+    @Override
+    public void createGraph(Graph<Integer, DefaultEdge> graph) throws SQLException {
+        String values = graph.edgeSet()
+                .stream()
+                .map(edge -> {
+                    var v1 = graph.getEdgeSource(edge);
+                    var v2 = graph.getEdgeTarget(edge);
+                    return String.format("(%d, 0, %d)", v1, v2);
+                })
+                .collect(Collectors.joining(", "));
+
+        String query = "INSERT INTO triple VALUES " + values;
+        statement.executeUpdate(query);
     }
 
     @Override
     public void close() throws Exception {
         statement.close();
         connection.close();
+    }
+
+    @Override
+    public LoggableDatabaseImpl loggable() {
+        return new LoggableDatabaseImpl(this);
     }
 }

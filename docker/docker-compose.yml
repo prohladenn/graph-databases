@@ -11,10 +11,10 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-  #    deploy:
-  #      resources:
-  #        limits:
-  #          cpus: '0.5'
+      deploy:
+        resources:
+          limits:
+            cpus: '1'
 
   neo4j_db:
     container_name: neo4j_db
@@ -24,10 +24,10 @@ services:
       - 7687:7687
     environment:
       NEO4J_AUTH: 'neo4j/QWErty123'
-  #    deploy:
-  #      resources:
-  #        limits:
-  #          cpus: '0.50'
+      deploy:
+        resources:
+          limits:
+            cpus: '1'
 
   arango_db:
     container_name: arangodb_db
@@ -36,10 +36,10 @@ services:
       - 8529:8529
     environment:
       ARANGO_NO_AUTH: 1
-  #    deploy:
-  #      resources:
-  #        limits:
-  #          cpus: '0.50'
+      deploy:
+        resources:
+          limits:
+            cpus: '1'
 
   orient_db:
     container_name: orient_db

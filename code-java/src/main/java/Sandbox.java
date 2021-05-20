@@ -1,6 +1,6 @@
-import db.ArangoDB;
-import db.Neo4j;
-import db.Postgres;
+import db.ArangoDBImpl;
+import db.Neo4jImpl;
+import db.PostgresImpl;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import data.Source;
@@ -11,7 +11,7 @@ public class Sandbox {
         Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
         //Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
 
-        try (var neo4j = new Neo4j().loggable()) {
+        try (var neo4j = new Neo4jImpl().loggable()) {
             System.out.println("--- NEO4j START ---");
             //neo4j.removeAll();
             //neo4j.createGraph(graph);
@@ -23,7 +23,7 @@ public class Sandbox {
             System.out.println("--- NEO4j FINISH ---");
         }
 
-        try (var postgres = new Postgres().loggable()) {
+        try (var postgres = new PostgresImpl().loggable()) {
             System.out.println("--- POSTGRES START ---");
             //postgres.removeAll();
             //postgres.createGraph(graph);
@@ -35,7 +35,7 @@ public class Sandbox {
             System.out.println("--- POSTGRES FINISH ---");
         }
 
-        try (var arangoDB = new ArangoDB().loggable()) {
+        try (var arangoDB = new ArangoDBImpl().loggable()) {
             System.out.println("--- ARANGO_DB START ---");
             //arangoDB.removeAll();
             //arangoDB.createGraph(graph);
