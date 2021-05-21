@@ -1,6 +1,7 @@
 package db;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.util.Pair;
@@ -14,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,7 +73,7 @@ public class PostgresImpl implements Database, Loggable {
     public List<?> shortestPath(Integer v1, Integer v2) throws SQLException {
         var data = selectAllImpl();
         var graph = loadGraph(data);
-        return new DijkstraShortestPath<>(graph).getPath(v1, v2).getEdgeList();
+        return Optional.ofNullable(new DijkstraShortestPath<>(graph).getPath(v1, v2)).map(GraphPath::getEdgeList).orElse(List.of());
     }
 
     @Override
