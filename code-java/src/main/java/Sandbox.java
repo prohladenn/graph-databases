@@ -1,20 +1,13 @@
-import data.Source;
-import db.Neo4jImpl;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-
-import java.util.stream.LongStream;
-
 public class Sandbox {
     public static void main(String[] args) throws Exception {
         //Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
         //Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
-        Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
+        //Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
 
         /*try (var postgres = new PostgresImpl()) {
             System.out.println("--- POSTGRES START ---");
-            //postgres.removeAll();
-            //postgres.createGraph(graph);
+            postgres.removeAll();
+            postgres.createGraph(graph);
             //postgres.selectAll();
             //postgres.shortestPath(53, 5642);
             //postgres.nearestNeighbors(814, 2);
@@ -42,7 +35,6 @@ public class Sandbox {
 //                postgres.nearestNeighbors(8579, 3); // GNUTELLA NN
 //                postgres.nearestNeighbors(693, 3);  // FACEBOOK NN
 
-                postgres.nearestNeighbors(814, 3);
                 res[i] = System.nanoTime() - t;
             }
             System.out.print(String.format("%4.5f\t", LongStream.of(res).min().orElseThrow() / 1e9));
@@ -51,7 +43,7 @@ public class Sandbox {
             System.out.println("--- POSTGRES FINISH ---");
         }*/
 
-        try (var neo4j = new Neo4jImpl()) {
+        /*try (var neo4j = new Neo4jImpl()) {
             System.out.println("--- NEO4j START ---");
             neo4j.removeAll();
             neo4j.createGraph(graph);
@@ -80,7 +72,7 @@ public class Sandbox {
 //
 //                neo4j.nearestNeighbors(1712, 3); // COLLEGE NN
 //                neo4j.nearestNeighbors(8579, 3); // GNUTELLA NN
-                neo4j.nearestNeighbors(693, 3);  // FACEBOOK NN
+//                neo4j.nearestNeighbors(693, 3);  // FACEBOOK NN
 
                 res[i] = System.nanoTime() - t;
             }
@@ -88,12 +80,12 @@ public class Sandbox {
             System.out.print(String.format("%4.5f\t", LongStream.of(res).average().orElseThrow() / 1e9));
             System.out.println(String.format("%4.5f", LongStream.of(res).max().orElseThrow() / 1e9));
             System.out.println("--- NEO4j FINISH ---");
-        }
+        }*/
 
         /*try (var arangoDB = new ArangoDBImpl()) {
             System.out.println("--- ARANGO_DB START ---");
-            //arangoDB.removeAll();
-            //arangoDB.createGraph(graph);
+            arangoDB.removeAll();
+            arangoDB.createGraph(graph);
             //arangoDB.selectAll();
             //arangoDB.shortestPath(53, 5642);
             //arangoDB.nearestNeighbors(814, 2);
@@ -120,6 +112,7 @@ public class Sandbox {
 //                arangoDB.nearestNeighbors(1712, 3); // COLLEGE NN
 //                arangoDB.nearestNeighbors(8579, 3); // GNUTELLA NN
 //                arangoDB.nearestNeighbors(693, 3);  // FACEBOOK NN
+
                 res[i] = System.nanoTime() - t;
             }
             System.out.print(String.format("%4.5f\t", LongStream.of(res).min().orElseThrow() / 1e9));
