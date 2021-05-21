@@ -110,9 +110,9 @@ public class ResearchShortestPathData {
 
     private static void filterSortLimit(Map<String, Object[]> results, double filter) {
         results.entrySet().stream()
-                .filter(entry -> Math.abs((int) entry.getValue()[0] - filter) <= 0.5)
-                .sorted(Comparator.comparing((Function<Map.Entry<String, Object[]>, Long>) entry -> (Long) (entry.getValue())[2]).reversed())
+                .sorted(Comparator.comparing(entry -> Math.abs((int) (entry.getValue())[0] - filter)))
                 .limit(10)
+                .sorted(Comparator.comparing((Function<Map.Entry<String, Object[]>, Long>) entry -> (Long) (entry.getValue())[2]).reversed())
                 .forEach(ResearchShortestPathData::out);
     }
 
