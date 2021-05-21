@@ -57,7 +57,7 @@ public class ResearchShortestPathData {
         report10LongestInTime(results);
         report10LongestPath(results);
         report10MiddlePath(results);
-        report10ShortestPath(results);
+        report10NoPath(results);
 
         System.out.println("End for " + source.getName());
     }
@@ -93,18 +93,15 @@ public class ResearchShortestPathData {
     private static void report10MiddlePath(Map<String, Object[]> results) {
         System.out.println("#10 middle path");
         int max = results.values().stream().map(objects -> (Integer) (objects)[0]).max(Comparator.comparing(i -> i)).orElseThrow();
-        int min = results.values().stream().map(objects -> (Integer) (objects)[0]).min(Comparator.comparing(i -> i)).orElseThrow();
-        double mid = (max * 1.0 + min) / 2;
+        double mid = (max * 1.0 + 1) / 2;
         System.out.println("Mid = " + mid);
         filterSortLimit(results, mid);
         System.out.println();
     }
 
-    private static void report10ShortestPath(Map<String, Object[]> results) {
-        System.out.println("#10 shortest path");
-        int min = results.values().stream().map(objects -> (Integer) (objects)[0]).min(Comparator.comparing(i -> i)).orElseThrow();
-        System.out.println("Min = " + min);
-        filterSortLimit(results, min);
+    private static void report10NoPath(Map<String, Object[]> results) {
+        System.out.println("#10 no path");
+        filterSortLimit(results, 0);
         System.out.println();
     }
 
