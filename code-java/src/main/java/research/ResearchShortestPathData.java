@@ -86,38 +86,34 @@ public class ResearchShortestPathData {
         System.out.println("#10 longest path");
         var max = results.values().stream().map(objects -> (Integer) (objects)[0]).max(Comparator.comparing(i -> i)).orElseThrow();
         System.out.println("Max = " + max);
-        results.entrySet().stream()
-                .filter(entry -> Math.abs((int) entry.getValue()[0] - max) <= 0.5)
-                .sorted(Comparator.comparing((Function<Map.Entry<String, Object[]>, Long>) entry -> (Long) (entry.getValue())[2]).reversed())
-                .limit(10)
-                .forEach(ResearchShortestPathData::out);
+        filterSortLimit(results, max);
         System.out.println();
     }
 
     private static void report10MiddlePath(Map<String, Object[]> results) {
         System.out.println("#10 middle path");
-        var max = results.values().stream().map(objects -> (Integer) (objects)[0]).max(Comparator.comparing(i -> i)).orElseThrow();
-        var min = results.values().stream().map(objects -> (Integer) (objects)[0]).min(Comparator.comparing(i -> i)).orElseThrow();
-        var mid = (max * 1.0 + min) / 2;
+        int max = results.values().stream().map(objects -> (Integer) (objects)[0]).max(Comparator.comparing(i -> i)).orElseThrow();
+        int min = results.values().stream().map(objects -> (Integer) (objects)[0]).min(Comparator.comparing(i -> i)).orElseThrow();
+        double mid = (max * 1.0 + min) / 2;
         System.out.println("Mid = " + mid);
-        results.entrySet().stream()
-                .filter(entry -> Math.abs((int) entry.getValue()[0] - mid) <= 0.5)
-                .sorted(Comparator.comparing((Function<Map.Entry<String, Object[]>, Long>) entry -> (Long) (entry.getValue())[2]).reversed())
-                .limit(10)
-                .forEach(ResearchShortestPathData::out);
+        filterSortLimit(results, mid);
         System.out.println();
     }
 
     private static void report10ShortestPath(Map<String, Object[]> results) {
         System.out.println("#10 shortest path");
-        var min = results.values().stream().map(objects -> (Integer) (objects)[0]).min(Comparator.comparing(i -> i)).orElseThrow();
+        int min = results.values().stream().map(objects -> (Integer) (objects)[0]).min(Comparator.comparing(i -> i)).orElseThrow();
         System.out.println("Min = " + min);
+        filterSortLimit(results, min);
+        System.out.println();
+    }
+
+    private static void filterSortLimit(Map<String, Object[]> results, double filter) {
         results.entrySet().stream()
-                .filter(entry -> Math.abs((int) entry.getValue()[0] - min) <= 0.5)
+                .filter(entry -> Math.abs((int) entry.getValue()[0] - filter) <= 0.5)
                 .sorted(Comparator.comparing((Function<Map.Entry<String, Object[]>, Long>) entry -> (Long) (entry.getValue())[2]).reversed())
                 .limit(10)
                 .forEach(ResearchShortestPathData::out);
-        System.out.println();
     }
 
     private static void out(Map.Entry<String, Object[]> entry) {
