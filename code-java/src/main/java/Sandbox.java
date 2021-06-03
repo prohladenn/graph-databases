@@ -1,8 +1,53 @@
+import data.Source;
+import db.PostgresImpl;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.graph.DefaultEdge;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class Sandbox {
     public static void main(String[] args) throws Exception {
-        //Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
-        //Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
-        //Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
+        Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
+        var p1 = new Pair<>("1", "33");
+        var p2 = new Pair<>("1712", "672");
+        var p3 = new Pair<>("453", "121");
+        var p4 = new Pair<>("768", "1658");
+
+        /*Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
+        var p1 = new Pair<>("540", "7808");
+        var p2 = new Pair<>("8579", "8794");
+        var p3 = new Pair<>("6119", "1857");
+        var p4 = new Pair<>("3560", "1555");*/
+
+        /*Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
+        var p1 = new Pair<>("350", "3310");
+        var p2 = new Pair<>("693", "1526");
+        var p3 = new Pair<>("506", "3389");
+        var p4 = new Pair<>("1592", "1599");*/
+
+        var testData = IntStream.range(0, 100)
+                .mapToObj(i -> {
+                    switch (i % 4) {
+                        case 0:
+                            return p1;
+                        case 1:
+                            return p2;
+                        case 2:
+                            return p3;
+                        default:
+                            return p4;
+                    }
+                }).collect(Collectors.toList());
+
+        try (var db = new PostgresImpl()) {
+            db.init();
+            db.addGraph(graph);
+
+
+            //db.getShortestPath()
+        }
 
         /*try (var postgres = new PostgresImpl()) {
             System.out.println("--- POSTGRES START ---");

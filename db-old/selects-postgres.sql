@@ -1,14 +1,14 @@
-WITH entity_with_property AS (SELECT ite.id, ite.entity, p.property
-                              FROM id_to_entity ite
-                                       JOIN property p ON ite.id = p.entity)
+WITH entity_with_property AS (SELECT e.id, e.title, p.property
+                              FROM entity e
+                                       JOIN property p ON e.id = p.entity_id)
 SELECT ewps.id       AS subject_id,
-       ewps.entity   AS subject,
+       ewps.title    AS subject_title,
        ewps.property AS subject_property,
-       itp.predicate,
+       p.title       AS property_title,
        ewpo.id       AS object_id,
-       ewpo.entity   AS object,
+       ewpo.title    AS object_title,
        ewpo.property AS object_property
 FROM triple t
-         JOIN id_to_predicate itp ON t.predicate = itp.id
+         JOIN predicate p ON t.predicate = p.id
          JOIN entity_with_property ewps ON t.subject = ewps.id
          JOIN entity_with_property ewpo ON t.object = ewpo.id;

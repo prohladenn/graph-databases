@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.entity</OriginalElement>
+  <nodes>
+    <node x="493.0" y="12.5">dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.predicate</node>
+    <node x="223.3920971055835" y="10.0">dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.triple</node>
+    <node x="-28.5" y="1.5">dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.entity</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.triple" target="dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.entity">
+      <point x="0.0" y="5.0" />
+      <point x="0.0" y="5.0" />
+    </edge>
+    <edge source="dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.triple" target="dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.predicate">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Circular" zoom="1.0" x="299.0" y="75.0" />
+  <SelectedNodes>
+    <node>dc4cf0d8-816f-4693-ab71-396383000040.TABLE:postgres.public.entity</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
