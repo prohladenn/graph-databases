@@ -1,7 +1,7 @@
 package research;
 
 import data.Source;
-import db.ArangoDB2Impl;
+import db.ArangoDBImpl;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -16,8 +16,8 @@ public class ResearchGetByAttribute {
         Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
 
         //try (var db = new PostgresImpl()) {
-        //try (var db = new Neo4j2Impl()) {
-        try (var db = new ArangoDB2Impl()) {
+        //try (var db = new Neo4jImpl()) {
+        try (var db = new ArangoDBImpl()) {
             db.init();
             db.addGraph(graph);
 
@@ -40,7 +40,7 @@ public class ResearchGetByAttribute {
         System.out.println(sortedTime[(int) Math.ceil(98 / 100.0 * sortedTime.length) - 1] * 1e-6 + " мс 98");
     }
 
-    private static List<Long> test1(ArangoDB2Impl db) throws Exception {
+    private static List<Long> test1(ArangoDBImpl db) throws Exception {
         var time = new ArrayList<Long>(500);
         for (int i = 0; i < 500; i++) {
             var t = System.nanoTime();
@@ -50,7 +50,7 @@ public class ResearchGetByAttribute {
         return time;
     }
 
-    private static List<Long> test2(ArangoDB2Impl db) throws Exception {
+    private static List<Long> test2(ArangoDBImpl db) throws Exception {
         var time = new ArrayList<Long>(500);
         for (int i = 0; i < 500; i++) {
             var t = System.nanoTime();

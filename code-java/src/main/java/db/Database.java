@@ -7,40 +7,21 @@ import java.util.List;
 
 public interface Database extends AutoCloseable {
 
-    /**
-     * Get all nodes and edges from the database.
-     *
-     * @return all nodes and edges.
-     */
-    List<?> selectAll() throws Exception;
+    void init() throws Exception;
 
-    /**
-     * Find the shortest path between two nodes of a graph.
-     *
-     * @param v1 first node id.
-     * @param v2 second node id.
-     * @return shortest path.
-     */
-    List<?> shortestPath(Integer v1, Integer v2) throws Exception;
+    void clear() throws Exception;
 
-    /**
-     * Find all nearest neighbors of the specified node on the specified level.
-     *
-     * @param v     node id.
-     * @param level level.
-     * @return nearest neighbors.
-     */
-    List<?> nearestNeighbors(Integer v, int level) throws Exception;
+    void addNode(String v) throws Exception;
 
-    /**
-     * Remove all nodes and edges from the database.
-     */
-    void removeAll() throws Exception;
+    void addEdge(String v1, String v2) throws Exception;
 
-    /**
-     * Creates in the database a graph identical to the input.
-     *
-     * @param graph input graph.
-     */
-    void createGraph(Graph<Integer, DefaultEdge> graph) throws Exception;
+    List<Long> addGraph(Graph<Integer, DefaultEdge> graph) throws Exception;
+
+    List<?> getByNodeAttribute(String va) throws Exception;
+
+    List<?> getByEdgeAttribute(String ea) throws Exception;
+
+    List<?> getShortestPath(String v1, String v2) throws Exception;
+
+    List<?> getNearestNeighbors(String v, int level) throws Exception;
 }

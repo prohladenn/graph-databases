@@ -18,7 +18,6 @@
 \addbibresource{my_folder/my_biblio.bib} % 
 
 
-
 %%%% Полезные настройки / Usefull settings
 %% 
 %% Раскомментируйте, чтобы
@@ -37,7 +36,6 @@ pdfstartview={FitBH}
 %% set data after the thesis title - uncomment code in title.tex
 \let\ordinal\relax %avoid extra warning
 \usepackage{datetime}
-
 
 
 %% In case of deleting the following info, please, delete the examples in the chapter body.
@@ -59,7 +57,7 @@ pdfstartview={FitBH}
 
 %https://tex.stackexchange.com/a/389805/44348
 \newcommand{\fcaarrow}[1]{%
-	{}^{\scriptscriptstyle\bm{#1}}
+{}^{\scriptscriptstyle\bm{#1}}
 }
 %%%%%%%%%%%%%%%%%%%%%%% ARROWS from Formal Concept Analysis
 % small and bold \uparrow
@@ -76,18 +74,41 @@ pdfstartview={FitBH}
 \newcommand\eqdef{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}} %\sffamily
 
 
-
 %%% Правила задания нового окружения
 
 \theoremstyle{myplain} % первая команда для ввода доказательств
-\newtheorem{m-new-env-first}{Название\_окружения}[chapter] 
+\newtheorem{m-new-env-first}{Название\_окружения}[chapter]
 % вместо m-new-env-first необходимо подставить название нового окружения;
 % вместо Название\_окружения необходимо подставить название окружения, выводящееся в pdf;
 % последний параметр обеспечивает нумерацию в пределах главы не меняется
 
 
 \theoremstyle{mydefinition} % первая команда для ввода окружений, не связанных с доказательствами
-\newtheorem{m-new-env-second}{Название\_окружения}[chapter] 
+\newtheorem{m-new-env-second}{Название\_окружения}[chapter]
 % вместо m-new-env-second необходимо подставить название нового окружения;
 % вместо Название\_окружения необходимо подставить название окружения, выводящееся в pdf;
 % последний параметр обеспечивает нумерацию в пределах главы не меняется
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+language=Java,
+aboveskip=3mm,
+belowskip=3mm,
+showstringspaces=false,
+columns=flexible,
+basicstyle={\small\ttfamily},
+numbers=none,
+numberstyle=\tiny\color{gray},
+keywordstyle=\color{blue},
+commentstyle=\color{dkgreen},
+stringstyle=\color{mauve},
+breaklines=true,
+breakatwhitespace=true,
+tabsize=3
+}

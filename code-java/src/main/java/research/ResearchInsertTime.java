@@ -1,7 +1,7 @@
 package research;
 
 import data.Source;
-import db.ArangoDB2Impl;
+import db.ArangoDBImpl;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -23,8 +23,8 @@ public class ResearchInsertTime {
         Graph<Integer, DefaultEdge> g = Source.loadGraphFacebook();
 
         //try (var db = new PostgresImpl()) {
-        //try (var db = new Neo4j2Impl()) {
-        try (var db = new ArangoDB2Impl()) {
+        //try (var db = new Neo4jImpl()) {
+        try (var db = new ArangoDBImpl()) {
             db.init();
             db.clear();
 

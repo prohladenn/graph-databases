@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class Neo4j2Impl implements Database2 {
+public class Neo4JImpl implements Database {
 
     public static final String URI = "bolt://localhost:7687";
     public static final String USER = "neo4j";
@@ -23,7 +23,7 @@ public class Neo4j2Impl implements Database2 {
     private final Driver driver;
     private final Session session;
 
-    public Neo4j2Impl() {
+    public Neo4JImpl() {
         driver = GraphDatabase.driver(URI, AuthTokens.basic(USER, PASSWORD));
         session = driver.session();
     }

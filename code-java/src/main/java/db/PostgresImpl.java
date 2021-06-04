@@ -20,7 +20,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PostgresImpl implements Database2 {
+public class PostgresImpl implements Database {
 
     private static final String CREATE_IF_NOT_EXIST = "" +
             "DROP TABLE IF EXISTS entity CASCADE;\n" +

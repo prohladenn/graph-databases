@@ -1,8 +1,8 @@
 package research;
 
 import data.Source;
-import db.Database2;
-import db.Neo4j2Impl;
+import db.Database;
+import db.Neo4JImpl;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.DefaultEdge;
@@ -48,8 +48,8 @@ public class ResearchShortestPath {
                 }).collect(Collectors.toList());
 
         //try (var db = new PostgresImpl()) {
-        try (var db = new Neo4j2Impl()) {
-        //try (var db = new ArangoDB2Impl()) {
+        try (var db = new Neo4JImpl()) {
+        //try (var db = new ArangoDBImpl()) {
             //db.init();
             //db.addGraph(graph);
 
@@ -65,7 +65,7 @@ public class ResearchShortestPath {
         }
     }
 
-    private static List<Long> test(Database2 db, List<Pair<String, String>> testData) throws Exception {
+    private static List<Long> test(Database db, List<Pair<String, String>> testData) throws Exception {
         var time = new ArrayList<Long>(testData.size());
         for (var p : testData) {
             var t = System.nanoTime();
