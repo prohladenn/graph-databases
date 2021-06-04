@@ -104,12 +104,14 @@ public class Neo4j2Impl implements Database2 {
 
     @Override
     public List<?> getByNodeAttribute(String va) {
-        return null;
+        return session.writeTransaction(tx -> tx.run("MATCH (n) -[r]-> (m) RETURN r;")
+                .stream().collect(Collectors.toList()));
     }
 
     @Override
     public List<?> getByEdgeAttribute(String ea) {
-        return null;
+        return session.writeTransaction(tx -> tx.run("MATCH (n) -[r]-> (m) RETURN r;")
+                .stream().collect(Collectors.toList()));
     }
 
     private static final String SHORTEST_PATH = "" +

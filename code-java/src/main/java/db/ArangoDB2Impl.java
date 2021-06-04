@@ -60,6 +60,7 @@ public class ArangoDB2Impl implements Database2 {
             db.createGraph(GRAPH_NAME, List.of(EDGE_DEFINITION), null);
         }
         graph = db.graph(GRAPH_NAME);
+        clear();
     }
 
     @Override
@@ -123,19 +124,28 @@ public class ArangoDB2Impl implements Database2 {
 
     @Override
     public List<?> getShortestPath(String v1, String v2) throws Exception {
-        return null;
+        String q = String.format("FOR v IN OUTBOUND SHORTEST_PATH 'nodes/%s' TO 'nodes/%s' " +
+                "GRAPH 'graph' RETURN [v._id, v._key]", v1, v2);
+        return execute(q, Node.class);
     }
 
     @Override
     public List<?> getNearestNeighbors(String v, int level) throws Exception {
-        return null;
+        String qIn = String.format("FOR v IN 1..%d INBOUND 'nodes/%s' " +
+                "GRAPH 'graph' RETURN v._key", level, v);
+        String qOut = String.format("FOR v IN 1..%d OUTBOUND 'nodes/%s' " +
+                "GRAPH 'graph' RETURN v._key", level, v);
+        return Stream.concat(
+                execute(qIn, Integer.class).stream(),
+                execute(qOut, Integer.class).stream()
+        ).distinct().sorted().collect(Collectors.toList());
     }
 
-    private List<Node> getAllNodes() throws Exception {
+    public List<Node> getAllNodes() throws Exception {
         return execute("FOR node IN nodes RETURN [node._id, node._key]", Node.class);
     }
 
-    private List<NodeEdge> getAllEdges() throws Exception {
+    public List<NodeEdge> getAllEdges() throws Exception {
         return execute("FOR edge IN edges RETURN [edge._id, edge._from, edge._to]", NodeEdge.class);
     }
 

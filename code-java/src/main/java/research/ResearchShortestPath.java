@@ -15,11 +15,11 @@ import java.util.stream.LongStream;
 
 public class ResearchShortestPath {
     public static void main(String[] args) throws Exception {
-        Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
+        /*Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
         var p1 = new Pair<>("1", "33");
         var p2 = new Pair<>("1712", "672");
         var p3 = new Pair<>("453", "121");
-        var p4 = new Pair<>("768", "1658");
+        var p4 = new Pair<>("768", "1658");*/
 
         /*Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
         var p1 = new Pair<>("540", "7808");
@@ -27,13 +27,13 @@ public class ResearchShortestPath {
         var p3 = new Pair<>("6119", "1857");
         var p4 = new Pair<>("3560", "1555");*/
 
-        /*Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
+        Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
         var p1 = new Pair<>("350", "3310");
         var p2 = new Pair<>("693", "1526");
         var p3 = new Pair<>("506", "3389");
-        var p4 = new Pair<>("1592", "1599");*/
+        var p4 = new Pair<>("1592", "1599");
 
-        List<Pair<String, String>> testData = IntStream.range(0, 100)
+        List<Pair<String, String>> testData = IntStream.range(0, 2000)
                 .mapToObj(i -> {
                     switch (i % 4) {
                         case 0:
@@ -50,8 +50,8 @@ public class ResearchShortestPath {
         //try (var db = new PostgresImpl()) {
         try (var db = new Neo4j2Impl()) {
         //try (var db = new ArangoDB2Impl()) {
-            db.init();
-            db.addGraph(graph);
+            //db.init();
+            //db.addGraph(graph);
 
             var sortedTime = test(db, testData).stream().mapToLong(Long::longValue).sorted().toArray();
             var mean = LongStream.of(sortedTime).average().orElseThrow();
@@ -69,7 +69,8 @@ public class ResearchShortestPath {
         var time = new ArrayList<Long>(testData.size());
         for (var p : testData) {
             var t = System.nanoTime();
-            System.out.println(db.getShortestPath(p.getFirst(), p.getSecond()).toString());
+            //System.out.println(db.getShortestPath(p.getFirst(), p.getSecond()).toString());
+            db.getShortestPath(p.getFirst(), p.getSecond());
             time.add(System.nanoTime() - t);
         }
         return time;

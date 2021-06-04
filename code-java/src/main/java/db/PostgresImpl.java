@@ -161,6 +161,11 @@ public class PostgresImpl implements Database2 {
         return result;
     }
 
+    public List<?> getAllEdges() throws Exception {
+        var resultSet = statement.executeQuery(GET_ALL_EDGES);
+        return convertResult(resultSet);
+    }
+
     @Override
     public List<?> getByNodeAttribute(String va) throws Exception {
         var resultSet = statement.executeQuery(GET_BY_NODE_ATTRIBUTE.replaceAll("%s", va));
