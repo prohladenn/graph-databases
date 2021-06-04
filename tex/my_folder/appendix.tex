@@ -1,13 +1,638 @@
 \chapter{Код проекта для работы с базами данных}
 
 \begin{lstlisting}
-// Hello.java
-import javax.swing.JApplet;
-import java.awt.Graphics;
+// Database.java
+package db;
 
-public class Hello extends JApplet {
-    public void paintComponent(Graphics g) {
-        g.drawString("Hello, world!", 65, 95);
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+
+import java.util.List;
+
+public interface Database extends AutoCloseable {
+
+    void init() throws Exception;
+
+    void clear() throws Exception;
+
+    void addNode(String v) throws Exception;
+
+    void addEdge(String v1, String v2) throws Exception;
+
+    List<Long> addGraph(Graph<Integer, DefaultEdge> graph) throws Exception;
+
+    List<?> getByNodeAttribute(String va) throws Exception;
+
+    List<?> getByEdgeAttribute(String ea) throws Exception;
+
+    List<?> getShortestPath(String v1, String v2) throws Exception;
+
+    List<?> getNearestNeighbors(String v, int level) throws Exception;
+}
+
+// PostgresImpl.java
+package db;
+
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class PostgresImpl implements Database {
+
+    private static final String CREATE_IF_NOT_EXIST = "" +
+            "DROP TABLE IF EXISTS entity CASCADE;\n" +
+            "CREATE TABLE entity\n" +
+            "(\n" +
+            "    id       SERIAL PRIMARY KEY,\n" +
+            "    title    varchar(30) UNIQUE NOT NULL,\n" +
+            "    property jsonb\n" +
+            ");\n" +
+            "\n" +
+            "DROP TABLE IF EXISTS predicate CASCADE;\n" +
+            "CREATE TABLE predicate\n" +
+            "(\n" +
+            "    id    SERIAL PRIMARY KEY,\n" +
+            "    title varchar(15) UNIQUE NOT NULL\n" +
+            ");\n" +
+            "\n" +
+            "DROP TABLE IF EXISTS triple;\n" +
+            "CREATE TABLE triple\n" +
+            "(\n" +
+            "    subject   integer NOT NULL REFERENCES entity (id),\n" +
+            "    predicate integer NOT NULL REFERENCES predicate (id),\n" +
+            "    object    integer NOT NULL REFERENCES entity (id),\n" +
+            "    property  jsonb,\n" +
+            "    PRIMARY KEY (subject, predicate, object)\n" +
+            ");\n" +
+            "\n" +
+            "INSERT INTO predicate (title)\n" +
+            "VALUES ('DEPENDENT')\n" +
+            "ON CONFLICT DO NOTHING;\n;" +
+            "\n" +
+            "DROP FUNCTION IF EXISTS getEntity;\n" +
+            "CREATE FUNCTION getEntity(varchar) RETURNS integer\n" +
+            "AS 'SELECT id FROM entity WHERE title = $1;'\n" +
+            "    LANGUAGE SQL\n" +
+            "    IMMUTABLE\n" +
+            "    RETURNS NULL ON NULL INPUT;\n";
+
+
+    private static final String ADD_NODE = "" +
+            "INSERT INTO entity (title)\n" +
+            "VALUES ('v%s')\n" +
+            "ON CONFLICT DO NOTHING;";
+
+    private static final String ADD_EDGE = "" +
+            "INSERT INTO triple (subject, predicate, object)\n" +
+            "SELECT getEntity('v%s'), 1, getEntity('v%s');";
+
+    private static final String GET_ALL_EDGES = "" +
+            "SELECT\n" +
+            "       es.title AS subject,\n" +
+            "       es.property AS subject_property,\n" +
+            "       p.title AS predicate,\n" +
+            "       t.property AS predicate_property,\n" +
+            "       eo.title AS object,\n" +
+            "       eo.property AS object_property\n" +
+            "FROM triple t\n" +
+            "         JOIN predicate p ON t.predicate = p.id\n" +
+            "         JOIN entity es ON t.subject = es.id\n" +
+            "         JOIN entity eo ON t.object = eo.id\n";
+
+    private static final String GET_BY_NODE_ATTRIBUTE = GET_ALL_EDGES + "" +
+            "WHERE es.property::TEXT LIKE '%' || '%s' || '%' OR\n" +
+            "      eo.property::TEXT LIKE '%' || '%s' || '%';";
+
+    private static final String GET_BY_EDGE_ATTRIBUTE = GET_ALL_EDGES + "" +
+            "WHERE t.property::TEXT LIKE '%' || '%s' || '%';";
+
+    private static final String URL = "jdbc:postgresql://localhost:6666/postgres";
+    private static final Properties PROPERTIES = new Properties() {{
+        setProperty("user", "postgres");
+        setProperty("password", "postgres");
+    }};
+
+    private final Connection connection;
+    private final Statement statement;
+
+    public PostgresImpl() throws SQLException {
+        this.connection = DriverManager.getConnection(URL, PROPERTIES);
+        this.statement = connection.createStatement();
+    }
+
+    @Override
+    public void init() throws Exception {
+        statement.execute(CREATE_IF_NOT_EXIST);
+    }
+
+    @Override
+    public void clear() throws Exception {
+        statement.executeUpdate("TRUNCATE triple");
+        statement.executeUpdate("TRUNCATE entity");
+        //statement.executeUpdate("TRUNCATE predicate");
+    }
+
+    @Override
+    public void addNode(String v) throws Exception {
+        statement.execute(String.format(ADD_NODE, v));
+    }
+
+    @Override
+    public void addEdge(String v1, String v2) throws Exception {
+        statement.execute(String.format(ADD_EDGE, v1, v2));
+    }
+
+    @Override
+    public List<Long> addGraph(Graph<Integer, DefaultEdge> graph) throws Exception {
+        for (var v : graph.vertexSet()) {
+            addNode(v.toString());
+        }
+
+        var time = new ArrayList<Long>(graph.edgeSet().size());
+
+        for (var e : graph.edgeSet()) {
+            var v1 = graph.getEdgeSource(e);
+            var v2 = graph.getEdgeTarget(e);
+            var t = System.nanoTime();
+            addEdge(v1.toString(), v2.toString());
+            time.add(System.nanoTime() - t);
+        }
+
+        return time;
+    }
+
+    private List<List<String>> convertResult(ResultSet resultSet) throws SQLException {
+        var result = new ArrayList<List<String>>(resultSet.getMetaData().getColumnCount());
+        while (resultSet.next()) {
+            result.add(
+                    List.of(
+                            Optional.ofNullable(resultSet.getString(1)).orElse(""),
+                            Optional.ofNullable(resultSet.getString(2)).orElse(""),
+                            Optional.ofNullable(resultSet.getString(3)).orElse(""),
+                            Optional.ofNullable(resultSet.getString(4)).orElse(""),
+                            Optional.ofNullable(resultSet.getString(5)).orElse(""),
+                            Optional.ofNullable(resultSet.getString(6)).orElse("")
+                    )
+            );
+        }
+        return result;
+    }
+
+    public List<?> getAllEdges() throws Exception {
+        var resultSet = statement.executeQuery(GET_ALL_EDGES);
+        return convertResult(resultSet);
+    }
+
+    @Override
+    public List<?> getByNodeAttribute(String va) throws Exception {
+        var resultSet = statement.executeQuery(GET_BY_NODE_ATTRIBUTE.replaceAll("%s", va));
+        return convertResult(resultSet);
+    }
+
+    @Override
+    public List<?> getByEdgeAttribute(String ea) throws Exception {
+        var resultSet = statement.executeQuery(GET_BY_EDGE_ATTRIBUTE.replace("%s", ea));
+        return convertResult(resultSet);
+    }
+
+    private Graph<Integer, DefaultEdge> loadGraph(List<List<String>> data) {
+        Graph<Integer, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+        data.forEach(row -> {
+            var v1 = Integer.parseInt(row.get(0).substring(1));
+            var v2 = Integer.parseInt(row.get(4).substring(1));
+            graph.addVertex(v1);
+            graph.addVertex(v2);
+            graph.addEdge(v1, v2);
+        });
+        return graph;
+    }
+
+    @Override
+    public List<?> getShortestPath(String v1, String v2) throws Exception {
+        if (v1.startsWith("v")) {
+            v1 = v1.substring(1);
+        }
+        if (v2.startsWith("v")) {
+            v2 = v2.substring(1);
+        }
+
+        var data = convertResult(statement.executeQuery(GET_ALL_EDGES));
+        var graph = loadGraph(data);
+
+        return Optional.ofNullable(new DijkstraShortestPath<>(graph)
+                .getPath(Integer.parseInt(v1), Integer.parseInt(v2)))
+                .map(GraphPath::getEdgeList)
+                .orElse(List.of());
+    }
+
+    @Override
+    public List<?> getNearestNeighbors(String v, int level) throws Exception {
+        var data = convertResult(statement.executeQuery(GET_ALL_EDGES));
+        var graph = loadGraph(data);
+
+        var result = new HashSet<>(Graphs.neighborListOf(graph, Integer.parseInt(v.substring(1))));
+        for (int i = 1; i < level; i++) {
+            Set.copyOf(result).forEach(v1 -> result.addAll(Graphs.neighborListOf(graph, v1)));
+        }
+        return result.stream().distinct().sorted().collect(Collectors.toList());
+    }
+
+    @Override
+    public void close() throws Exception {
+        statement.close();
+        connection.close();
+    }
+}
+
+// Neo4jImpl.java
+package db;
+
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.neo4j.driver.AuthTokens;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.internal.InternalPath;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+public class Neo4JImpl implements Database {
+
+    public static final String URI = "bolt://localhost:7687";
+    public static final String USER = "neo4j";
+    public static final String PASSWORD = "QWErty123";
+
+    private final Driver driver;
+    private final Session session;
+
+    public Neo4JImpl() {
+        driver = GraphDatabase.driver(URI, AuthTokens.basic(USER, PASSWORD));
+        session = driver.session();
+    }
+
+    @Override
+    public void init() {
+        clear();
+    }
+
+    @Override
+    public void clear() {
+        session.writeTransaction(tx -> tx.run("MATCH (n) DETACH DELETE n;"));
+    }
+
+    @Override
+    public void addNode(String v) {
+        session.writeTransaction(tx -> tx.run(String.format("CREATE (v%s:NODE {id:%s})", v, v)));
+    }
+
+    @Override
+    public void addEdge(String v1, String v2) {
+        session.writeTransaction(tx -> tx.run("MATCH\n" +
+                "(v1:NODE), (v2:NODE)\n" +
+                "WHERE v1.id = " + v1 + " AND v2.id = " + v2 + "\n" +
+                "CREATE (v1)-[r:RELATED]->(v2)\n" +
+                "RETURN type(r)"
+        ));
+    }
+
+    @Override
+    public List<Long> addGraph(Graph<Integer, DefaultEdge> graph) {
+        // Check data size
+        if (graph.vertexSet().size() > 10_000) throw new RuntimeException("To many nodes");
+        if (graph.edgeSet().size() > 100_000) throw new RuntimeException("To many edges");
+
+        if (true) {
+            return addGraphFixed(graph);
+        }
+
+        for (var v : graph.vertexSet()) {
+            addNode(v.toString());
+        }
+
+        var time = new ArrayList<Long>(graph.edgeSet().size());
+
+        for (var e : graph.edgeSet()) {
+            var v1 = graph.getEdgeSource(e);
+            var v2 = graph.getEdgeTarget(e);
+            var t = System.nanoTime();
+            addEdge(v1.toString(), v2.toString());
+            time.add(System.nanoTime() - t);
+        }
+
+        return time;
+    }
+
+    public List<Long> addGraphFixed(Graph<Integer, DefaultEdge> graph) {
+        // Render nodes
+        String nodes = graph.vertexSet()
+                .stream()
+                .map(i -> String.format("(a%d:NODE{id:%d})", i, i))
+                .collect(Collectors.joining(", "));
+
+        // Render edges
+        String edges = graph.edgeSet()
+                .stream()
+                .map(edge -> {
+                    var v1 = graph.getEdgeSource(edge);
+                    var v2 = graph.getEdgeTarget(edge);
+                    return String.format("(a%d)-[:RELATED]->(a%d)", v1, v2);
+                })
+                .collect(Collectors.joining(", "));
+
+        var t = System.nanoTime();
+        session.writeTransaction(tx -> tx.run("CREATE " + nodes + " CREATE " + edges));
+        return List.of(System.nanoTime() - t);
+    }
+
+    @Override
+    public List<?> getByNodeAttribute(String va) {
+        return session.writeTransaction(tx -> tx.run("MATCH (n) RETURN n;")
+                .stream().collect(Collectors.toList()));
+    }
+
+    @Override
+    public List<?> getByEdgeAttribute(String ea) {
+        return session.writeTransaction(tx -> tx.run("MATCH (n) -[r]-> (m) RETURN r;")
+                .stream().collect(Collectors.toList()));
+    }
+
+    private static final String SHORTEST_PATH = "" +
+            "MATCH " +
+            "   (v1:NODE {id: %s} )," +
+            "   (v2:NODE {id: %s})," +
+            "   path = shortestPath((v1)-[:RELATED*]-(v2)) " +
+            "RETURN path";
+
+    @Override
+    public List<?> getShortestPath(String v1, String v2) {
+        return session.writeTransaction(tx -> {
+            InternalPath path = (InternalPath) tx.run(String.format(SHORTEST_PATH, v1, v2))
+                    .single().asMap().get("path");
+            return StreamSupport.stream(path.spliterator(), false)
+                    .map(segment -> String.format("(%s : %s)",
+                            segment.start().asMap().get("id"),
+                            segment.end().asMap().get("id")))
+                    .collect(Collectors.toList());
+        });
+    }
+
+    private static final String NEAREST_NEIGHBORS = "" +
+            "MATCH (m) -[*1..%d]-> (:NODE{id: %s}) -[*1..%d]-> (n) \n" +
+            "RETURN m, n;";
+
+    @Override
+    public List<?> getNearestNeighbors(String v, int level) {
+        return session.writeTransaction(tx ->
+                tx.run(String.format(NEAREST_NEIGHBORS, level, v, level)).stream()
+                        .flatMap(record -> Stream.of(
+                                record.get("m").asMap().get("id"),
+                                record.get("n").asMap().get("id")))
+                        .distinct()
+                        .sorted()
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public void close() {
+        session.close();
+        driver.close();
+    }
+}
+
+// ArangoDBImpl.java
+package db;
+
+import com.arangodb.ArangoDatabase;
+import com.arangodb.ArangoGraph;
+import com.arangodb.entity.DocumentField;
+import com.arangodb.entity.DocumentField.Type;
+import com.arangodb.entity.EdgeDefinition;
+import com.arangodb.entity.VertexEntity;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class ArangoDBImpl implements Database {
+
+    private static final String DB_NAME = "graph_db";
+    private static final String GRAPH_NAME = "graph";
+    private static final String EDGE_COLLECTION_NAME = "edges";
+    private static final String VERTEX_COLLECTION_NAME = "nodes";
+
+    private static final EdgeDefinition EDGE_DEFINITION = new EdgeDefinition()
+            .collection(EDGE_COLLECTION_NAME)
+            .from(VERTEX_COLLECTION_NAME)
+            .to(VERTEX_COLLECTION_NAME);
+
+    private final com.arangodb.ArangoDB arangoDB;
+    private final ArangoDatabase db;
+    private ArangoGraph graph;
+
+    public ArangoDBImpl() {
+        arangoDB = new com.arangodb.ArangoDB.Builder().build();
+
+        if (!arangoDB.db(DB_NAME).exists()) {
+            arangoDB.createDatabase(DB_NAME);
+        }
+        db = arangoDB.db(DB_NAME);
+
+        init();
+    }
+
+    private <T> List<T> execute(String q, Class<T> tClass) throws Exception {
+        List<T> result = new ArrayList<>();
+        var arangoCursor = db.query(q, String.class);
+        while (arangoCursor.hasNext()) {
+            Object[] cells = arangoCursor.next().replaceAll("[\\[\\]\"]", "").split(",");
+            var params = Collections.nCopies(cells.length, String.class).toArray(Class[]::new);
+            result.add(tClass.getConstructor(params).newInstance(cells));
+        }
+        return result;
+    }
+
+    @Override
+    public void init() {
+        if (!db.graph(GRAPH_NAME).exists()) {
+            db.createGraph(GRAPH_NAME, List.of(EDGE_DEFINITION), null);
+        }
+        graph = db.graph(GRAPH_NAME);
+        clear();
+    }
+
+    @Override
+    public void clear() {
+        if (graph.exists()) {
+            graph.drop();
+            db.collection("edges").drop();
+            db.collection("nodes").drop();
+        }
+        db.createGraph(GRAPH_NAME, List.of(EDGE_DEFINITION), null);
+        graph = db.graph(GRAPH_NAME);
+    }
+
+    @Override
+    public void addNode(String v) {
+
+    }
+
+    @Override
+    public void addEdge(String v1, String v2) {
+
+    }
+
+    @Override
+    public List<Long> addGraph(Graph<Integer, DefaultEdge> graph) {
+        // Check data size
+        if (graph.vertexSet().size() > 10_000) throw new RuntimeException("To many nodes");
+        if (graph.edgeSet().size() > 100_000) throw new RuntimeException("To many edges");
+
+        // Insert nodes
+        var vertexCollection = this.graph.vertexCollection(VERTEX_COLLECTION_NAME);
+        var idToVertexEntity = new HashMap<Integer, VertexEntity>(graph.vertexSet().size());
+        graph.vertexSet().forEach(vertex ->
+                idToVertexEntity.put(vertex, vertexCollection.insertVertex(new Node(vertex))));
+
+        // Insert edges
+        var edgeCollection = this.graph.edgeCollection(EDGE_COLLECTION_NAME);
+        var time = new ArrayList<Long>(graph.edgeSet().size());
+        graph.edgeSet().forEach(edge -> {
+            var v1 = graph.getEdgeSource(edge);
+            var v2 = graph.getEdgeTarget(edge);
+            var t = System.nanoTime();
+            edgeCollection.insertEdge(new NodeEdge(
+                    idToVertexEntity.get(v1).getId(),
+                    idToVertexEntity.get(v2).getId()));
+            time.add(System.nanoTime() - t);
+        });
+
+        return time;
+    }
+
+    @Override
+    public List<?> getByNodeAttribute(String va) throws Exception {
+        return execute("FOR node IN nodes RETURN [node._id, node._key]", Node.class);
+    }
+
+    @Override
+    public List<?> getByEdgeAttribute(String ea) throws Exception {
+        return execute("FOR edge IN edges RETURN [edge._id, edge._from, edge._to]", NodeEdge.class);
+    }
+
+    @Override
+    public List<?> getShortestPath(String v1, String v2) throws Exception {
+        String q = String.format("FOR v IN OUTBOUND SHORTEST_PATH 'nodes/%s' TO 'nodes/%s' " +
+                "GRAPH 'graph' RETURN [v._id, v._key]", v1, v2);
+        return execute(q, Node.class);
+    }
+
+    @Override
+    public List<?> getNearestNeighbors(String v, int level) throws Exception {
+        String qIn = String.format("FOR v IN 1..%d INBOUND 'nodes/%s' " +
+                "GRAPH 'graph' RETURN v._key", level, v);
+        String qOut = String.format("FOR v IN 1..%d OUTBOUND 'nodes/%s' " +
+                "GRAPH 'graph' RETURN v._key", level, v);
+        return Stream.concat(
+                execute(qIn, Integer.class).stream(),
+                execute(qOut, Integer.class).stream()
+        ).distinct().sorted().collect(Collectors.toList());
+    }
+
+    public List<?> shortestPath(Integer v1, Integer v2) throws Exception {
+        String q = String.format("FOR v IN OUTBOUND SHORTEST_PATH 'nodes/%d' TO 'nodes/%d' " +
+                "GRAPH 'graph' RETURN [v._id, v._key]", v1, v2);
+        return execute(q, Node.class);
+    }
+
+    public List<?> nearestNeighbors(Integer v, int level) throws Exception {
+        String qIn = String.format("FOR v IN 1..%d INBOUND 'nodes/%d' " +
+                "GRAPH 'graph' RETURN v._key", level, v);
+        String qOut = String.format("FOR v IN 1..%d OUTBOUND 'nodes/%d' " +
+                "GRAPH 'graph' RETURN v._key", level, v);
+        return Stream.concat(
+                execute(qIn, Integer.class).stream(),
+                execute(qOut, Integer.class).stream()
+        ).distinct().sorted().collect(Collectors.toList());
+    }
+
+    @Override
+    public void close() {
+        arangoDB.shutdown();
+    }
+
+    private static class Node {
+        @DocumentField(Type.ID)
+        private String id;
+        @DocumentField(Type.KEY)
+        private final String value;
+
+        @SuppressWarnings({"unused", "RedundantSuppression"}) //Used vie reflection
+        public Node(String id, String value) {
+            this.id = id;
+            this.value = value;
+        }
+
+        public Node(Integer value) {
+            this.value = String.valueOf(value);
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+
+    private static class NodeEdge {
+        @DocumentField(Type.ID)
+        private String id;
+        @DocumentField(Type.FROM)
+        private final String from;
+        @DocumentField(Type.TO)
+        private final String to;
+
+        @SuppressWarnings({"unused", "RedundantSuppression"}) //Used vie reflection
+        public NodeEdge(String id, String from, String to) {
+            this.id = id;
+            this.from = from;
+            this.to = to;
+        }
+
+        public NodeEdge(String from, String to) {
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("(%s : %s)", from, to);
+        }
     }
 }
 \end{lstlisting}
