@@ -23,13 +23,13 @@ public class ResearchGetEdges {
 
             var sortedTime = test(db).stream().mapToLong(Long::longValue).sorted().toArray();
             var mean = LongStream.of(sortedTime).average().orElseThrow();
-            System.out.println(mean * 1e-6 + " сек среднее");
+            System.out.println(mean * 1e-6 + " мс среднее");
             var sd = Math.sqrt(LongStream.of(sortedTime)
                     .mapToDouble(l -> (l * 1e-6 - mean * 1e-6) * (l * 1e-6 - mean * 1e-6))
                     .sum() / sortedTime.length);
-            System.out.println(sd + " сек отклонение");
-            System.out.println(sortedTime[(int) Math.ceil(95 / 100.0 * sortedTime.length) - 1] * 1e-6 + " сек 95");
-            System.out.println(sortedTime[(int) Math.ceil(98 / 100.0 * sortedTime.length) - 1] * 1e-6 + " сек 98");
+            System.out.println(sd + " мс отклонение");
+            System.out.println(sortedTime[(int) Math.ceil(95 / 100.0 * sortedTime.length) - 1] * 1e-6 + " мс 95");
+            System.out.println(sortedTime[(int) Math.ceil(98 / 100.0 * sortedTime.length) - 1] * 1e-6 + " мс 98");
         }
     }
 
