@@ -1,7 +1,7 @@
 package research;
 
 import data.Source;
-import db.Neo4j2Impl;
+import db.ArangoDB2Impl;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.LongStream;
 
-public class ResearchGetEdges {
+public class ResearchGetByAttribute {
     public static void main(String[] args) throws Exception {
-        Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
+        //Graph<Integer, DefaultEdge> graph = Source.loadGraphCollege();
         //Graph<Integer, DefaultEdge> graph = Source.loadGraphGnutella();
-        //Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
+        Graph<Integer, DefaultEdge> graph = Source.loadGraphFacebook();
 
         //try (var db = new PostgresImpl()) {
-        try (var db = new Neo4j2Impl()) {
-            //try (var db = new ArangoDB2Impl()) {
+        //try (var db = new Neo4j2Impl()) {
+        try (var db = new ArangoDB2Impl()) {
             db.init();
             db.addGraph(graph);
 
-            long[] sortedTime1 = test(db).stream().mapToLong(Long::longValue).sorted().toArray();
-            long[] sortedTime2 = test(db).stream().mapToLong(Long::longValue).sorted().toArray();
+            long[] sortedTime1 = test1(db).stream().mapToLong(Long::longValue).sorted().toArray();
+            long[] sortedTime2 = test2(db).stream().mapToLong(Long::longValue).sorted().toArray();
 
             report(sortedTime1);
             report(sortedTime2);
@@ -40,7 +40,17 @@ public class ResearchGetEdges {
         System.out.println(sortedTime[(int) Math.ceil(98 / 100.0 * sortedTime.length) - 1] * 1e-6 + " мс 98");
     }
 
-    private static List<Long> test(Neo4j2Impl db) throws Exception {
+    private static List<Long> test1(ArangoDB2Impl db) throws Exception {
+        var time = new ArrayList<Long>(500);
+        for (int i = 0; i < 500; i++) {
+            var t = System.nanoTime();
+            System.out.println(i + " " + db.getByNodeAttribute("").size());
+            time.add(System.nanoTime() - t);
+        }
+        return time;
+    }
+
+    private static List<Long> test2(ArangoDB2Impl db) throws Exception {
         var time = new ArrayList<Long>(500);
         for (int i = 0; i < 500; i++) {
             var t = System.nanoTime();

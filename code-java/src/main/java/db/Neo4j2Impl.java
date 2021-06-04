@@ -104,7 +104,7 @@ public class Neo4j2Impl implements Database2 {
 
     @Override
     public List<?> getByNodeAttribute(String va) {
-        return session.writeTransaction(tx -> tx.run("MATCH (n) -[r]-> (m) RETURN r;")
+        return session.writeTransaction(tx -> tx.run("MATCH (n) RETURN n;")
                 .stream().collect(Collectors.toList()));
     }
 

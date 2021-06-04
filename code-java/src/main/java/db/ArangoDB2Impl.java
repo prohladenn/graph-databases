@@ -114,12 +114,12 @@ public class ArangoDB2Impl implements Database2 {
 
     @Override
     public List<?> getByNodeAttribute(String va) throws Exception {
-        return null;
+        return execute("FOR node IN nodes RETURN [node._id, node._key]", Node.class);
     }
 
     @Override
     public List<?> getByEdgeAttribute(String ea) throws Exception {
-        return null;
+        return execute("FOR edge IN edges RETURN [edge._id, edge._from, edge._to]", NodeEdge.class);
     }
 
     @Override
@@ -139,19 +139,6 @@ public class ArangoDB2Impl implements Database2 {
                 execute(qIn, Integer.class).stream(),
                 execute(qOut, Integer.class).stream()
         ).distinct().sorted().collect(Collectors.toList());
-    }
-
-    public List<Node> getAllNodes() throws Exception {
-        return execute("FOR node IN nodes RETURN [node._id, node._key]", Node.class);
-    }
-
-    public List<NodeEdge> getAllEdges() throws Exception {
-        return execute("FOR edge IN edges RETURN [edge._id, edge._from, edge._to]", NodeEdge.class);
-    }
-
-    public List<?> selectAll() throws Exception {
-        var nodes = getAllNodes();
-        return getAllEdges(); // TODO merge with info about nodes
     }
 
     public List<?> shortestPath(Integer v1, Integer v2) throws Exception {
