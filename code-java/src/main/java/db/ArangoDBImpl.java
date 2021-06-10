@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArangoDBImpl implements Database {
+public class ArangoDBImpl implements Database, Loggable {
 
     private static final String DB_NAME = "graph_db";
     private static final String GRAPH_NAME = "graph";
@@ -161,6 +161,11 @@ public class ArangoDBImpl implements Database {
     @Override
     public void close() {
         arangoDB.shutdown();
+    }
+
+    @Override
+    public LoggableDatabaseImpl loggable() {
+        return null;
     }
 
     private static class Node {

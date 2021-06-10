@@ -20,7 +20,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PostgresImpl implements Database {
+public class PostgresImpl implements Database, Loggable {
 
     private static final String CREATE_IF_NOT_EXIST = "" +
             "DROP TABLE IF EXISTS entity CASCADE;\n" +
@@ -224,5 +224,10 @@ public class PostgresImpl implements Database {
     public void close() throws Exception {
         statement.close();
         connection.close();
+    }
+
+    @Override
+    public LoggableDatabaseImpl loggable() {
+        return null;
     }
 }

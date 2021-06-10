@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class Neo4JImpl implements Database {
+public class Neo4JImpl implements Database, Loggable {
 
     public static final String URI = "bolt://localhost:7687";
     public static final String USER = "neo4j";
@@ -155,5 +155,10 @@ public class Neo4JImpl implements Database {
     public void close() {
         session.close();
         driver.close();
+    }
+
+    @Override
+    public LoggableDatabaseImpl loggable() {
+        return null;
     }
 }
